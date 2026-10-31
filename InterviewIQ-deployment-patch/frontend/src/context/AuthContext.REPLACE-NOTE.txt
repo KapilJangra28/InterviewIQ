@@ -1,8 +1,0 @@
-IMPORTANT: This patch introduces frontend/src/api.js. Before deploying, update every axios call that currently uses relative URLs like axios.post('/api/...') to use the shared api client:
-
-1. Add: import api from '../api'; (adjust relative path to the file's directory)
-2. Replace axios.post('/api/...') with api.post('/api/...').
-3. Replace axios.get('/api/...') with api.get('/api/...'), etc.
-4. In AuthContext.jsx, remove the existing import of axios and import api from '../api'. Replace all axios requests with api requests. Keep the existing login/register fallback behavior only for development; disable mock/demo fallback in production before real user authentication is enabled.
-
-Relative /api requests are currently handled by the Vite dev proxy, which does not exist in production. The source code contains API calls across several page files, so do not assume the new client is wired in until these replacements are made.
