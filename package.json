@@ -1,0 +1,25 @@
+{
+  "name": "interviewiq-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "InterviewIQ – AI-Powered Mock Interview & Recruitment Platform",
+  "scripts": {
+    "start": "node live_server.js",
+    "backend:start": "cd backend && npm start",
+    "backend:dev": "cd backend && npm run dev",
+    "frontend:dev": "cd frontend && npm run dev",
+    "frontend:build": "cd frontend && npm run build",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "ai",
+    "interview-preparation",
+    "recruitment",
+    "react",
+    "nodejs",
+    "express"
+  ],
+  "author": "Kapil Jangra",
+  "license": "MIT"
+}

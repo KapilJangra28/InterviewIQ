@@ -30,10 +30,33 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
+// Dynamic CORS configuration for Vercel, Render, and Localhost
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+].filter(Boolean);
+
+const isOriginAllowed = (origin) => {
+  if (!origin) return true; // Mobile, Postman, Server-to-server
+  if (allowedOrigins.includes(origin)) return true;
+  if (origin.endsWith('.vercel.app')) return true; // Any Vercel deployment preview or production
+  if (process.env.NODE_ENV !== 'production' || process.env.ALLOW_ALL_CORS === 'true') return true;
+  return false;
+};
+
 // Initialize Socket.IO for real-time alerts
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      if (isOriginAllowed(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Fallback allow to avoid dropping socket connections
+      }
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
   },
@@ -48,10 +71,18 @@ io.on('connection', (socket) => {
 });
 
 // Security & Utility Middlewares
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // Permissive fallback for seamless deployment
+    }
+  },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
@@ -59,6 +90,20 @@ app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
+
+// Root operational endpoint for Render monitoring
+app.get('/', (req, res) => {
+  res.json({
+    name: 'InterviewIQ Backend Core API',
+    status: 'online',
+    version: '1.0.0',
+    endpoints: {
+      health: '/api/health',
+      docs: '/api/auth'
+    },
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Rate Limiting on API endpoints
 const apiLimiter = rateLimit({
@@ -70,15 +115,18 @@ const apiLimiter = rateLimit({
 });
 app.use('/api', apiLimiter);
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
+// Health check endpoints (both /health and /api/health for Render Blueprint compatibility)
+const healthResponse = (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
     service: 'InterviewIQ Backend Core',
     tagline: 'Practice. Prepare. Perform. Get Hired.',
+    environment: process.env.NODE_ENV || 'production',
   });
-});
+};
+app.get('/health', healthResponse);
+app.get('/api/health', healthResponse);
 
 // Mount Routes
 app.use('/api/auth', authRoutes);

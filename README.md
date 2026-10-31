@@ -71,13 +71,51 @@ interviewIQ/
 
 ### Technology Highlights:
 * **Frontend**: React 18, Vite, Tailwind CSS, Lucide React icons, Framer Motion
+* **Modern Typography**:
+  * **Outfit**: High-impact, geometric font for titles, headings, and branding
+  * **Plus Jakarta Sans**: Polished, human-centric font for body, cards, and UI components
+  * **JetBrains Mono**: Clean monospace font for code, metrics, and timers
 * **Backend**: Node.js, Express, MongoDB / Mongoose, JWT authentication
 * **AI Engine**: Gemini API for answer analysis and rubric grading
 * **Speech Engine**: Web Speech Recognition & Web Speech Synthesis
 
 ---
 
-## 🚀 Getting Started
+## ☁️ Deployment Guide
+
+### 1. Deploy Backend to Render
+
+1. Sign in to [Render](https://render.com/).
+2. Click **New +** > **Blueprint** (or **Web Service**).
+3. Connect your GitHub repository: `https://github.com/KapilJangra28/InterviewIQ`.
+4. Render automatically detects `render.yaml` with the following pre-configured settings:
+   * **Root / Build Command**: `cd backend && npm install`
+   * **Start Command**: `cd backend && npm start`
+   * **Health Check Path**: `/api/health`
+5. Configure your Environment Variables in the Render dashboard:
+   * `MONGO_URI`: Your MongoDB Atlas connection string
+   * `JWT_SECRET`: Random 32+ character secret string
+   * `CLIENT_URL`: Your Vercel frontend URL (e.g. `https://your-app.vercel.app`)
+   * `GEMINI_API_KEY`: Your Google Gemini API Key
+
+---
+
+### 2. Deploy Frontend to Vercel
+
+1. Sign in to [Vercel](https://vercel.com/).
+2. Click **Add New...** > **Project** and import `KapilJangra28/InterviewIQ`.
+3. Configure Project Settings:
+   * **Framework Preset**: Vite
+   * **Root Directory**: `./` (or `frontend`)
+   * **Build Command**: `cd frontend && npm install && npm run build`
+   * **Output Directory**: `frontend/dist`
+4. Add Environment Variables:
+   * `VITE_API_URL`: Your deployed Render backend URL (e.g. `https://interviewiq-backend.onrender.com`)
+5. Click **Deploy**. Vercel will automatically apply `vercel.json` with SPA routing rewrites and security headers.
+
+---
+
+## 🚀 Getting Started Locally
 
 ### 1. Prerequisites
 * [Node.js](https://nodejs.org/) (v18.0.0 or higher)

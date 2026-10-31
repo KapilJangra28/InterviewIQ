@@ -4,51 +4,61 @@
 
 @layer base {
   body {
-    @apply bg-[#F8F9FC] text-[#171923] font-sans;
+    @apply bg-[#0A0C14] text-[#F1F5F9] font-sans;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
   }
 }
 
-/* Custom scrollbar */
+/* Custom modern scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F3F9;
+  background: #0A0C14;
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBC2F8;
+  background: rgba(102, 85, 217, 0.4);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #6655D9;
 }
 
-/* Glassmorphism helpers */
+/* Premium Dark Glassmorphism */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(232, 234, 237, 0.8);
+  background: rgba(22, 27, 46, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .glass-dropdown {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(102, 85, 217, 0.12);
-  box-shadow: 0 10px 30px -5px rgba(102, 85, 217, 0.15);
+  background: rgba(16, 20, 36, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(102, 85, 217, 0.25);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
 }
 
-/* Gradient text */
+.glass-card {
+  background: rgba(22, 27, 46, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Futuristic Gradient utilities */
 .gradient-text {
-  background: linear-gradient(135deg, #6655D9 0%, #8975F0 50%, #4632AF 100%);
+  background: linear-gradient(135deg, #A99AF5 0%, #6655D9 50%, #38BDF8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-accent {
-  background: linear-gradient(135deg, #6655D9 0%, #A99AF5 100%);
+  background: linear-gradient(135deg, #6655D9 0%, #38BDF8 100%);
 }
 
 /* Marquee animation for brand slider */
