@@ -2,7 +2,7 @@
 
 Node.js / Express API scaffold for the InterviewIQ React frontend.
 
-## Local setup
+## Local setup.
 1. Install Node.js 20 or 22.
 2. In this directory run `cd backend && npm install`.
 3. Copy `.env.example` to `.env` and set `MONGO_URI` and a long `JWT_SECRET`.
