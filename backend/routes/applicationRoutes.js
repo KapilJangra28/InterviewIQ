@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import { authorize } from '../middleware/roleMiddleware.js';
+import { applyToJob, updateApplication } from '../controllers/applicationController.js';
+const router = Router();
+router.post('/:jobId/apply', protect, authorize('student'), applyToJob);
+router.post('/apply/:jobId', protect, authorize('student'), applyToJob);
+router.patch('/:id/status', protect, authorize('company'), updateApplication);
+router.put('/:id/status', protect, authorize('company'), updateApplication);
+export default router;

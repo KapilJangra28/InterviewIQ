@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import { authorize } from '../middleware/roleMiddleware.js';
+import { dashboard, getCompanyProfile } from '../controllers/companyController.js';
+import { getProfile, updateProfile } from '../controllers/profileController.js';
+import { myJobs, createJob } from '../controllers/jobController.js';
+const router = Router();
+router.use(protect, authorize('company'));
+router.get('/dashboard', dashboard);
+router.get('/profile', getCompanyProfile);
+router.put('/profile', updateProfile);
+router.get('/me', getProfile);
+router.get('/jobs', myJobs);
+router.post('/jobs', createJob);
+export default router;

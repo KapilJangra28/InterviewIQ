@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import { authorize } from '../middleware/roleMiddleware.js';
+import { getProfile, updateProfile } from '../controllers/profileController.js';
+import { myApplications } from '../controllers/applicationController.js';
+import { interviewHistory } from '../controllers/interviewController.js';
+const router = Router();
+router.use(protect, authorize('student'));
+router.get('/profile', getProfile);
+router.put('/profile', updateProfile);
+router.get('/applications', myApplications);
+router.get('/interviews', interviewHistory);
+export default router;

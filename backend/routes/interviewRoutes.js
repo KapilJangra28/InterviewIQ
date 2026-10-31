@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import { authorize } from '../middleware/roleMiddleware.js';
+import { startInterview, submitInterview, interviewHistory, interviewById } from '../controllers/interviewController.js';
+const router = Router();
+router.use(protect, authorize('student'));
+router.post('/start', startInterview);
+router.get('/', interviewHistory);
+router.get('/:id', interviewById);
+router.post('/:id/submit', submitInterview);
+export default router;

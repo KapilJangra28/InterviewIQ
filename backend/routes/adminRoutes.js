@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { protect } from '../middleware/authMiddleware.js';
+import { authorize } from '../middleware/roleMiddleware.js';
+import { dashboard, listCompanies, verifyCompany, listStudents, listAllJobs, moderateJob } from '../controllers/adminController.js';
+const router = Router();
+router.use(protect, authorize('admin'));
+router.get('/dashboard', dashboard);
+router.get('/companies', listCompanies);
+router.patch('/companies/:id/verification', verifyCompany);
+router.get('/students', listStudents);
+router.get('/jobs', listAllJobs);
+router.patch('/jobs/:id/moderate', moderateJob);
+export default router;
