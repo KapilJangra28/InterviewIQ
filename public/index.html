@@ -1,0 +1,3096 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterviewIQ – Role-Based AI Interview Preparation & Recruitment Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN with Dark Theme Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#1e1b4b',
+              100: '#2e2870',
+              200: '#4338ca',
+              300: '#6366f1',
+              400: '#818cf8',
+              500: '#6655D9', // Brand core purple
+              600: '#5542C6',
+              700: '#4632AF',
+              800: '#39288E',
+              900: '#2F2173',
+            },
+            accent: {
+              purple: '#A99AF5',
+              cyan: '#38BDF8',
+              cyanDark: '#0284C7',
+            },
+            dark: {
+              bg: '#0A0C14',
+              surface: '#111422',
+              card: '#161B2E',
+              border: '#232942',
+              muted: '#94A3B8',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          boxShadow: {
+            'glow-purple': '0 0 35px -5px rgba(102, 85, 217, 0.45)',
+            'glow-cyan': '0 0 35px -5px rgba(56, 189, 248, 0.4)',
+            'button': '0 4px 20px 0 rgba(102, 85, 217, 0.45)',
+            'card': '0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 25px 0 rgba(102, 85, 217, 0.12)',
+            'card-hover': '0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 30px 0 rgba(56, 189, 248, 0.25)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0A0C14;
+      color: #F1F5F9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Glassmorphism Styles */
+    .glass-dark {
+      background: rgba(19, 23, 38, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card {
+      background: rgba(22, 27, 46, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(102, 85, 217, 0.5);
+      box-shadow: 0 15px 35px -5px rgba(102, 85, 217, 0.25), 0 0 20px 0 rgba(56, 189, 248, 0.15);
+      transform: translateY(-3px);
+    }
+
+    .interactive-role-card {
+      position: relative;
+      background: linear-gradient(145deg, rgba(22, 27, 46, 0.85) 0%, rgba(17, 20, 34, 0.95) 100%);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .interactive-role-card:hover {
+      border-color: rgba(56, 189, 248, 0.6);
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 45px -10px rgba(102, 85, 217, 0.35), 0 0 35px 0 rgba(56, 189, 248, 0.25);
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(135deg, #A99AF5 0%, #818cf8 40%, #38BDF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Continuous Marquee */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 24s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+
+    /* Soundwave Pulsing */
+    @keyframes voice-pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 20px rgba(102, 85, 217, 0.4); }
+      50% { transform: scale(1.08); opacity: 0.6; box-shadow: 0 0 40px rgba(56, 189, 248, 0.7); }
+    }
+    .animate-voice-pulse {
+      animation: voice-pulse 2s ease-in-out infinite;
+    }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      pointer-events: none;
+      max-width: 380px;
+      width: 100%;
+    }
+    .toast-box {
+      pointer-events: auto;
+      animation: toastSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes toastSlide {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0C14;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #232942;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6655D9;
+    }
+  </style>
+</head>
+<body class="dark antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- ==================== FLOATING DARK NAVBAR ==================== -->
+  <header class="sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 pt-4 pb-2">
+    <div class="max-w-7xl mx-auto">
+      <div class="glass-dark rounded-full px-5 py-3 flex items-center justify-between border border-white/10 shadow-2xl">
+        
+        <!-- Brand Logo (Takes logged-in user to their dashboard; else welcome) -->
+        <button type="button" onclick="window.handleBrandClick()" class="flex items-center gap-2.5 group text-left cursor-pointer" title="Go to Home / Dashboard">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#6655D9] via-[#818cf8] to-[#38BDF8] flex items-center justify-center text-white shadow-button group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-lg font-black tracking-tight text-white group-hover:text-[#A99AF5] transition-colors leading-none">
+              Interview<span class="text-[#38BDF8]">IQ</span>
+            </span>
+            <span class="text-[9px] font-bold uppercase tracking-widest text-[#94A3B8] mt-0.5">
+              AI PLATFORM 2.0
+            </span>
+          </div>
+        </button>
+
+        <!-- Dynamic Contextual Navigation Links -->
+        <nav id="main-nav-links" class="hidden md:flex items-center gap-1 bg-[#161B2E]/90 px-3 py-1.5 rounded-full border border-white/10">
+          <!-- Injected dynamically by updateNavAuthState() -->
+        </nav>
+
+        <!-- Right Side: User Avatar/Name Badge & Logout Action -->
+        <div class="flex items-center gap-2.5">
+          <!-- Auth Badge when logged in (Clicking takes user to their dashboard) -->
+          <button type="button" id="nav-user-badge" onclick="window.goToActiveDashboard()" class="hidden items-center gap-2 bg-[#161B2E] hover:bg-[#1f2640] pl-2 pr-3 py-1 rounded-full border border-white/10 text-xs transition-colors cursor-pointer" title="View Your Profile">
+            <div id="nav-user-avatar" class="w-6 h-6 rounded-full bg-gradient-to-r from-[#6655D9] to-[#38BDF8] flex items-center justify-center text-white text-[10px] font-bold">
+              U
+            </div>
+            <span id="nav-user-name" class="font-bold text-white text-[11px] truncate max-w-[120px]">Candidate</span>
+            <span id="nav-user-role-pill" class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#6655D9]/30 text-[#A99AF5] border border-[#6655D9]/40">Student</span>
+          </button>
+
+          <!-- Explicit Logout Button (ONLY logs out when explicitly clicked) -->
+          <button type="button" id="btn-logout" onclick="window.logout()" class="hidden px-3.5 py-1.5 text-xs font-bold rounded-full bg-rose-500/10 text-rose-300 hover:bg-rose-500/20 border border-rose-500/30 transition-all cursor-pointer">
+            Logout
+          </button>
+
+          <!-- Actions when logged out -->
+          <div id="nav-logged-out-actions" class="flex items-center gap-2">
+            <button type="button" onclick="window.switchTab('welcome')" class="px-4 py-2 text-xs font-bold rounded-full text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors cursor-pointer">
+              Choose Role
+            </button>
+            <button type="button" onclick="window.switchTab('welcome')" class="px-5 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-[#6655D9] via-[#818cf8] to-[#38BDF8] text-white hover:opacity-90 transition-all shadow-glow-purple flex items-center gap-1.5 cursor-pointer">
+              <span>Sign In / Register</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN APPLICATION CONTAINER ==================== -->
+  <main id="app-container" class="flex-1 w-full relative">
+
+    <!-- Ambient Gradient Backdrops -->
+    <div class="absolute top-16 left-1/2 -translate-x-1/2 w-[800px] h-[450px] bg-gradient-to-tr from-[#6655D9]/20 via-[#38BDF8]/15 to-transparent blur-3xl pointer-events-none rounded-full -z-10"></div>
+    <div class="absolute top-80 right-1/4 w-[400px] h-[350px] bg-[#6655D9]/15 blur-3xl pointer-events-none rounded-full -z-10"></div>
+
+    <!-- =========================================================================
+         1. LOGIN SELECTION PAGE (view-welcome)
+         ========================================================================= -->
+    <div id="view-welcome" class="view-panel block max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+      
+      <!-- Active Session Notice Banner (Prevents unnecessary re-logins) -->
+      <div id="welcome-active-session-banner" class="hidden mb-8 p-4 rounded-3xl bg-gradient-to-r from-[#6655D9]/20 via-[#161B2E] to-[#38BDF8]/20 border border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <div id="welcome-active-avatar" class="w-10 h-10 rounded-2xl bg-gradient-to-r from-[#6655D9] to-[#38BDF8] flex items-center justify-center text-white font-bold text-sm shadow-sm">
+            U
+          </div>
+          <div>
+            <p class="text-[11px] text-[#A99AF5] font-semibold uppercase tracking-wider">Active Session Detected</p>
+            <h3 id="welcome-active-title" class="text-sm font-bold text-white">Signed in as Candidate</h3>
+          </div>
+        </div>
+        <button type="button" onclick="window.goToActiveDashboard()" class="w-full sm:w-auto px-5 py-2.5 text-xs font-bold rounded-xl bg-white text-[#0A0C14] hover:bg-gray-100 transition-all shadow-md cursor-pointer flex items-center justify-center gap-1.5 active:scale-95">
+          <span>Go to My Dashboard →</span>
+        </button>
+      </div>
+
+      <!-- Welcome Header -->
+      <div class="text-center max-w-3xl mx-auto space-y-4 mb-12 sm:mb-16">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1e1b4b]/80 border border-[#6655D9]/50 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-ping"></span>
+          <span class="text-xs font-extrabold text-[#A99AF5] uppercase tracking-wider">
+            ✦ Welcome to InterviewIQ ✦
+          </span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.1]">
+          Welcome to <span class="gradient-text">InterviewIQ</span>
+        </h1>
+
+        <p class="text-base sm:text-xl text-[#94A3B8] font-normal leading-relaxed max-w-2xl mx-auto">
+          Your AI-powered platform for smarter interview preparation and recruitment.
+        </p>
+
+        <p class="text-xs sm:text-sm text-gray-400">
+          Select how you want to experience InterviewIQ today to access your personalized portal:
+        </p>
+      </div>
+
+      <!-- Two Large Interactive Role Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
+        
+        <!-- CARD 1: STUDENT -->
+        <div class="interactive-role-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between group cursor-pointer border border-white/10 hover:border-[#A99AF5]/60 transition-all" onclick="window.handleStudentCardClick()">
+          <div class="space-y-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#6655D9] to-[#A99AF5] flex items-center justify-center text-white shadow-glow-purple group-hover:scale-110 transition-transform">
+              <svg class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 21v-8a2 2 0 00-2-2H6a2 2 0 00-2 2v8" />
+              </svg>
+            </div>
+
+            <span class="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#6655D9]/20 text-[#A99AF5] border border-[#6655D9]/40">
+              For Job Seekers & Students
+            </span>
+
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight group-hover:text-[#A99AF5] transition-colors">
+                Student
+              </h2>
+              <p class="text-sm text-[#94A3B8] mt-2 leading-relaxed">
+                Practise interviews, improve your skills and prepare for your dream job.
+              </p>
+            </div>
+
+            <ul class="space-y-2.5 pt-2 text-xs text-gray-300">
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400 font-bold">✓</span> Real-time speech recognition & live voice feedback
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400 font-bold">✓</span> Technical, HR, and Mixed non-repeating questions
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400 font-bold">✓</span> In-depth 0–10 rubric performance analytics
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400 font-bold">✓</span> Personalized skill improvement roadmap
+              </li>
+            </ul>
+          </div>
+
+          <div class="pt-8">
+            <button 
+              type="button" 
+              id="card-btn-student"
+              onclick="event.stopPropagation(); window.handleStudentCardClick()" 
+              class="w-full py-4 px-6 text-sm sm:text-base font-bold rounded-2xl bg-gradient-to-r from-[#6655D9] to-[#818cf8] text-white hover:opacity-95 transition-all shadow-button flex items-center justify-center gap-2 group-hover:shadow-glow-purple cursor-pointer active:scale-95"
+            >
+              <span id="card-btn-student-text">Continue as Student</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 2: COMPANY -->
+        <div class="interactive-role-card rounded-3xl p-8 sm:p-10 flex flex-col justify-between group cursor-pointer border border-white/10 hover:border-[#38BDF8]/60 transition-all" onclick="window.handleCompanyCardClick()">
+          <div class="space-y-6">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#0284C7] to-[#38BDF8] flex items-center justify-center text-white shadow-glow-cyan group-hover:scale-110 transition-transform">
+              <svg class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+
+            <span class="inline-block px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#0284C7]/20 text-[#38BDF8] border border-[#0284C7]/40">
+              For Recruiters & Companies
+            </span>
+
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight group-hover:text-[#38BDF8] transition-colors">
+                Company
+              </h2>
+              <p class="text-sm text-[#94A3B8] mt-2 leading-relaxed">
+                Create interviews, discover talent and manage candidates.
+              </p>
+            </div>
+
+            <ul class="space-y-2.5 pt-2 text-xs text-gray-300">
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">✓</span> Create custom multi-round interview campaigns
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">✓</span> Candidate pipeline scoring & status management
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">✓</span> Automated AI applicant screening & match percent
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400 font-bold">✓</span> Edit, delete & evaluate interview question banks
+              </li>
+            </ul>
+          </div>
+
+          <div class="pt-8">
+            <button 
+              type="button" 
+              id="card-btn-company"
+              onclick="event.stopPropagation(); window.handleCompanyCardClick()" 
+              class="w-full py-4 px-6 text-sm sm:text-base font-bold rounded-2xl bg-gradient-to-r from-[#0284C7] via-[#0EA5E9] to-[#38BDF8] text-white hover:opacity-95 transition-all shadow-button flex items-center justify-center gap-2 group-hover:shadow-glow-cyan cursor-pointer active:scale-95"
+            >
+              <span id="card-btn-company-text">Continue as Company</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Back to Home / Explore Platform Option -->
+      <div class="mt-12 text-center">
+        <button 
+          type="button" 
+          onclick="window.switchTab('landing')" 
+          class="inline-flex items-center gap-2 text-xs font-semibold text-[#94A3B8] hover:text-white transition-colors cursor-pointer px-4 py-2 rounded-xl hover:bg-white/5 border border-transparent hover:border-white/10"
+        >
+          <span>← Back to Home / Platform Overview</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         2. STUDENT LOGIN & REGISTRATION (view-auth-student)
+         ========================================================================= -->
+    <div id="view-auth-student" class="view-panel hidden max-w-md mx-auto px-4 py-12">
+      <div class="glass-dark rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
+        
+        <div class="text-center space-y-2">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-[#6655D9] to-[#A99AF5] flex items-center justify-center text-white shadow-glow-purple mb-2">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            </svg>
+          </div>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#A99AF5] px-2.5 py-0.5 rounded-full bg-[#6655D9]/20 border border-[#6655D9]/30">Student Portal</span>
+          <h2 id="student-auth-title" class="text-2xl font-black text-white">Student Sign In</h2>
+          <p id="student-auth-desc" class="text-xs text-[#94A3B8]">Sign in with your name to practice non-repeating AI interviews.</p>
+        </div>
+
+        <!-- Mode Toggle (Login vs Register) -->
+        <div class="flex p-1 bg-[#0A0C14] rounded-2xl border border-white/10 text-xs">
+          <button 
+            type="button" 
+            id="tab-btn-student-login" 
+            onclick="window.setStudentAuthMode('login')" 
+            class="flex-1 py-2 font-bold rounded-xl bg-[#6655D9] text-white transition-all"
+          >
+            Sign In
+          </button>
+          <button 
+            type="button" 
+            id="tab-btn-student-register" 
+            onclick="window.setStudentAuthMode('register')" 
+            class="flex-1 py-2 font-bold rounded-xl text-[#94A3B8] hover:text-white transition-all"
+          >
+            Create Account
+          </button>
+        </div>
+
+        <!-- Form Error Banner -->
+        <div id="student-error-box" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/40 text-xs text-rose-300"></div>
+
+        <!-- Student Form -->
+        <form id="student-auth-form" onsubmit="window.handleStudentAuth(event)" class="space-y-4">
+          
+          <!-- Your Name (Always visible so the user's actual name is respected) -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Your Full Name</label>
+            <input 
+              type="text" 
+              id="student-name-input" 
+              placeholder="e.g. Kapil Sharma" 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#6655D9]"
+            >
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Email Address</label>
+            <input 
+              type="email" 
+              id="student-email" 
+              placeholder="e.g. user@example.com" 
+              required 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#6655D9]"
+            >
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-semibold text-gray-300">Password</label>
+              <button 
+                type="button" 
+                id="student-forgot-link" 
+                onclick="window.openForgotPassword('student')" 
+                class="text-[11px] text-[#A99AF5] hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+            <input 
+              type="password" 
+              id="student-password" 
+              placeholder="••••••••" 
+              required 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#6655D9]"
+            >
+          </div>
+
+          <!-- Confirm Password (Only for Registration) -->
+          <div id="student-field-confirm-pass" class="hidden space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Confirm Password</label>
+            <input 
+              type="password" 
+              id="student-confirm-password" 
+              placeholder="••••••••" 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#6655D9]"
+            >
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            id="student-submit-btn" 
+            class="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-[#6655D9] hover:bg-[#5542C6] text-white transition-all shadow-button cursor-pointer active:scale-95"
+          >
+            Login as Student
+          </button>
+        </form>
+
+        <!-- 1-Click Demo Fill for Testing Convenience -->
+        <div id="student-demo-fill-box" class="pt-2 border-t border-white/10">
+          <button 
+            type="button" 
+            onclick="window.fillDemoStudent()" 
+            class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-[#A99AF5] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <span>⚡ Use Demo Account (Aarav Sharma)</span>
+          </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex items-center justify-between pt-2 text-xs text-[#94A3B8]">
+          <button type="button" onclick="window.switchTab('welcome')" class="hover:text-white transition-colors cursor-pointer">
+            ← Change Role
+          </button>
+          <button type="button" onclick="window.switchTab('landing')" class="hover:text-white transition-colors cursor-pointer">
+            Back to Home
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         3. COMPANY LOGIN & REGISTRATION (view-auth-company)
+         ========================================================================= -->
+    <div id="view-auth-company" class="view-panel hidden max-w-md mx-auto px-4 py-12">
+      <div class="glass-dark rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl space-y-6">
+        
+        <div class="text-center space-y-2">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-gradient-to-tr from-[#0284C7] to-[#38BDF8] flex items-center justify-center text-white shadow-glow-cyan mb-2">
+            <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#38BDF8] px-2.5 py-0.5 rounded-full bg-[#0284C7]/20 border border-[#0284C7]/40">Company Portal</span>
+          <h2 id="company-auth-title" class="text-2xl font-black text-white">Company Sign In</h2>
+          <p id="company-auth-desc" class="text-xs text-[#94A3B8]">Sign in to create interviews, discover talent and manage candidates.</p>
+        </div>
+
+        <!-- Mode Toggle (Login vs Register) -->
+        <div class="flex p-1 bg-[#0A0C14] rounded-2xl border border-white/10 text-xs">
+          <button 
+            type="button" 
+            id="tab-btn-company-login" 
+            onclick="window.setCompanyAuthMode('login')" 
+            class="flex-1 py-2 font-bold rounded-xl bg-[#0284C7] text-white transition-all"
+          >
+            Sign In
+          </button>
+          <button 
+            type="button" 
+            id="tab-btn-company-register" 
+            onclick="window.setCompanyAuthMode('register')" 
+            class="flex-1 py-2 font-bold rounded-xl text-[#94A3B8] hover:text-white transition-all"
+          >
+            Create Company Account
+          </button>
+        </div>
+
+        <!-- Form Error Banner -->
+        <div id="company-error-box" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/40 text-xs text-rose-300"></div>
+
+        <!-- Company Form -->
+        <form id="company-auth-form" onsubmit="window.handleCompanyAuth(event)" class="space-y-4">
+          
+          <!-- Recruiter / Your Name -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Recruiter / Your Name</label>
+            <input 
+              type="text" 
+              id="company-recruiter-name" 
+              placeholder="e.g. Sarah Jenkins" 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+            >
+          </div>
+
+          <!-- Company Name -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Company Name</label>
+            <input 
+              type="text" 
+              id="company-name" 
+              placeholder="e.g. TechPulse Cloud Solutions" 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+            >
+          </div>
+
+          <!-- Official Email -->
+          <div class="space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Official Work Email</label>
+            <input 
+              type="email" 
+              id="company-email" 
+              placeholder="e.g. recruiter@techpulse.io" 
+              required 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+            >
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-semibold text-gray-300">Password</label>
+              <button 
+                type="button" 
+                id="company-forgot-link" 
+                onclick="window.openForgotPassword('company')" 
+                class="text-[11px] text-[#38BDF8] hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+            <input 
+              type="password" 
+              id="company-password" 
+              placeholder="••••••••" 
+              required 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+            >
+          </div>
+
+          <!-- Confirm Password (Registration only) -->
+          <div id="company-field-confirm-pass" class="hidden space-y-1">
+            <label class="block text-xs font-semibold text-gray-300">Confirm Password</label>
+            <input 
+              type="password" 
+              id="company-confirm-password" 
+              placeholder="••••••••" 
+              class="w-full px-4 py-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+            >
+          </div>
+
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            id="company-submit-btn" 
+            class="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-[#0284C7] hover:bg-[#0369a1] text-white transition-all shadow-button cursor-pointer active:scale-95"
+          >
+            Login as Company
+          </button>
+        </form>
+
+        <!-- 1-Click Demo Fill for Testing Convenience -->
+        <div id="company-demo-fill-box" class="pt-2 border-t border-white/10">
+          <button 
+            type="button" 
+            onclick="window.fillDemoCompany()" 
+            class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-[#38BDF8] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <span>⚡ Use Demo Account (TechPulse Recruiter)</span>
+          </button>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="flex items-center justify-between pt-2 text-xs text-[#94A3B8]">
+          <button type="button" onclick="window.switchTab('welcome')" class="hover:text-white transition-colors cursor-pointer">
+            ← Change Role
+          </button>
+          <button type="button" onclick="window.switchTab('landing')" class="hover:text-white transition-colors cursor-pointer">
+            Back to Home
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         4. STUDENT DASHBOARD (view-student)
+         ========================================================================= -->
+    <div id="view-student" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <!-- Top Student Dashboard Header -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-[#6655D9]/20 text-[#A99AF5] border border-[#6655D9]/40">
+              Student Dashboard
+            </span>
+            <span class="text-xs text-emerald-400 font-semibold">● Active Session</span>
+          </div>
+          <!-- DYNAMIC HEADING - UPDATED WITH USER'S ACTUAL NAME -->
+          <h2 id="student-welcome-heading" class="text-2xl sm:text-3xl font-black text-white mt-1">
+            Welcome back, Candidate 👋
+          </h2>
+          <p id="student-welcome-sub" class="text-xs text-[#94A3B8]">
+            Candidate Portal • Ready for AI Mock Interviews
+          </p>
+        </div>
+
+        <!-- Student Action Buttons -->
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="window.openMockWithCategory('Technical')" 
+            class="px-4 py-2 text-xs font-bold rounded-xl bg-[#6655D9] text-white hover:bg-[#5542C6] transition-all shadow-button flex items-center gap-1.5 cursor-pointer active:scale-95"
+          >
+            <span>🚀 Start Mock Interview</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="window.logout()" 
+            class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-white/5 hover:bg-rose-500/20 text-gray-300 hover:text-rose-300 border border-white/10 cursor-pointer"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Feature Navigation Tabs (8 Features) -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-white/10">
+        <button type="button" onclick="window.setStudentSection('overview')" id="stu-tab-overview" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-bold bg-[#6655D9] text-white transition-all cursor-pointer">
+          Overview & Start Mock
+        </button>
+        <button type="button" onclick="window.setStudentSection('technical')" id="stu-tab-technical" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          Technical Interview
+        </button>
+        <button type="button" onclick="window.setStudentSection('hr')" id="stu-tab-hr" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          HR Interview
+        </button>
+        <button type="button" onclick="window.setStudentSection('mixed')" id="stu-tab-mixed" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          Mixed Interview
+        </button>
+        <button type="button" onclick="window.setStudentSection('analytics')" id="stu-tab-analytics" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          Performance Analytics
+        </button>
+        <button type="button" onclick="window.setStudentSection('history')" id="stu-tab-history" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          Interview History
+        </button>
+        <button type="button" onclick="window.setStudentSection('skills')" id="stu-tab-skills" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          Skill Improvement
+        </button>
+        <button type="button" onclick="window.setStudentSection('profile')" id="stu-tab-profile" class="stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          Personal Profile
+        </button>
+      </div>
+
+      <!-- SECTION A: Overview & Start Mock Interview -->
+      <div id="stu-sec-overview" class="stu-section space-y-6">
+        <!-- Banner Card -->
+        <div class="rounded-3xl bg-gradient-to-r from-[#6655D9] via-[#5542C6] to-[#2F2173] text-white p-6 sm:p-8 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="space-y-2 z-10 max-w-xl">
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-white/20 text-white">
+              AI Powered Practice
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black tracking-tight">
+              Ready for your next AI Interview Round?
+            </h3>
+            <p class="text-xs sm:text-sm text-purple-100 leading-relaxed">
+              Every practice session dynamically pulls unique, non-repeating questions tailored to your target engineering and leadership competencies.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2.5 z-10 w-full md:w-auto shrink-0">
+            <button 
+              type="button" 
+              onclick="window.openMockWithCategory('Technical')" 
+              class="px-5 py-3 rounded-xl bg-white text-[#6655D9] hover:bg-gray-100 text-xs font-extrabold shadow-lg cursor-pointer transition-all active:scale-95"
+            >
+              Start Technical Mock
+            </button>
+            <button 
+              type="button" 
+              onclick="window.openMockWithCategory('HR')" 
+              class="px-5 py-3 rounded-xl bg-[#0A0C14] text-white hover:bg-[#161B2E] border border-white/20 text-xs font-extrabold shadow-lg cursor-pointer transition-all active:scale-95"
+            >
+              Start HR Mock
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Metric Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Completed Sessions</span>
+            <p class="text-2xl font-black text-white mt-1">12</p>
+            <span class="text-[10px] text-emerald-400 font-bold">+3 this week</span>
+          </div>
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Average Rubric Score</span>
+            <p class="text-2xl font-black text-[#A99AF5] mt-1">8.6 / 10</p>
+            <span class="text-[10px] text-emerald-400 font-bold">Top 7th Percentile</span>
+          </div>
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Interview Readiness</span>
+            <p class="text-2xl font-black text-[#38BDF8] mt-1">92%</p>
+            <span class="text-[10px] text-cyan-400 font-bold">Tier 1 Ready</span>
+          </div>
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Strengths Identified</span>
+            <p class="text-2xl font-black text-emerald-400 mt-1">5 Areas</p>
+            <span class="text-[10px] text-gray-400">Architecture, Microservices</span>
+          </div>
+        </div>
+
+        <!-- 3 Category Launch Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card p-6 rounded-3xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#6655D9]/20 text-[#A99AF5] flex items-center justify-center border border-[#6655D9]/30">
+              💻
+            </div>
+            <h4 class="text-base font-bold text-white">Technical Interview</h4>
+            <p class="text-xs text-[#94A3B8] leading-relaxed">
+              5 unique technical questions covering distributed rate limiting, JS event loop, database indexing, and idempotency.
+            </p>
+            <button type="button" onclick="window.openMockWithCategory('Technical')" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-[#6655D9] text-white hover:bg-[#5542C6] cursor-pointer">
+              Launch Technical Chamber →
+            </button>
+          </div>
+
+          <div class="glass-card p-6 rounded-3xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+              🤝
+            </div>
+            <h4 class="text-base font-bold text-white">HR & Behavioral</h4>
+            <p class="text-xs text-[#94A3B8] leading-relaxed">
+              5 behavioral scenarios covering technical conflicts, tight launch deadlines, ownership, and peer mentorship.
+            </p>
+            <button type="button" onclick="window.openMockWithCategory('HR')" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer">
+              Launch HR Chamber →
+            </button>
+          </div>
+
+          <div class="glass-card p-6 rounded-3xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-[#0284C7]/20 text-[#38BDF8] flex items-center justify-center border border-[#0284C7]/30">
+              ⚡
+            </div>
+            <h4 class="text-base font-bold text-white">Mixed Interview</h4>
+            <p class="text-xs text-[#94A3B8] leading-relaxed">
+              5 comprehensive 360° scenarios blending architectural trade-offs, live production incident triage, and ethics.
+            </p>
+            <button type="button" onclick="window.openMockWithCategory('Mixed')" class="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-[#0284C7] hover:bg-[#0369a1] text-white cursor-pointer">
+              Launch Mixed Chamber →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION B: Technical Interview Features -->
+      <div id="stu-sec-technical" class="stu-section hidden space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div>
+            <h3 class="text-lg font-black text-white">Technical Interview Practice Center</h3>
+            <p class="text-xs text-[#94A3B8]">Deep-dive technical drills with real-time AI code and architecture rubric.</p>
+          </div>
+          <button type="button" onclick="window.openMockWithCategory('Technical')" class="px-4 py-2 text-xs font-bold rounded-xl bg-[#6655D9] text-white shadow-button">
+            Start Live Session
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl glass-card space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-[#A99AF5]">System Design Drill</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Advanced</span>
+            </div>
+            <h4 class="text-sm font-bold text-white">Distributed Rate Limiter (100k QPS)</h4>
+            <p class="text-xs text-gray-400">Design sliding window counter algorithms with Redis clusters and local token caching.</p>
+            <button type="button" onclick="window.openMockWithCategory('Technical')" class="mt-2 text-xs font-bold text-[#38BDF8] hover:underline cursor-pointer">
+              Practice Question Now →
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl glass-card space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-[#A99AF5]">Frontend Architecture</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">Intermediate</span>
+            </div>
+            <h4 class="text-sm font-bold text-white">JavaScript Event Loop & Microtasks</h4>
+            <p class="text-xs text-gray-400">Explain call stack ordering, promise resolution ticks, and requestAnimationFrame priority.</p>
+            <button type="button" onclick="window.openMockWithCategory('Technical')" class="mt-2 text-xs font-bold text-[#38BDF8] hover:underline cursor-pointer">
+              Practice Question Now →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION C: HR Interview Features -->
+      <div id="stu-sec-hr" class="stu-section hidden space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div>
+            <h3 class="text-lg font-black text-white">HR & Behavioral Practice Hub</h3>
+            <p class="text-xs text-[#94A3B8]">Master executive presence, STAR storytelling, and emotional intelligence.</p>
+          </div>
+          <button type="button" onclick="window.openMockWithCategory('HR')" class="px-4 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white">
+            Start Live HR Session
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl glass-card space-y-2">
+            <span class="text-xs font-bold text-emerald-400">Conflict Management</span>
+            <h4 class="text-sm font-bold text-white">Handling Technical Disagreements with Peers</h4>
+            <p class="text-xs text-gray-400">Structure responses using Situation, Task, Action, and Result to showcase constructive collaboration.</p>
+            <button type="button" onclick="window.openMockWithCategory('HR')" class="mt-2 text-xs font-bold text-[#A99AF5] hover:underline cursor-pointer">
+              Practice Behavioral Prompt →
+            </button>
+          </div>
+
+          <div class="p-5 rounded-2xl glass-card space-y-2">
+            <span class="text-xs font-bold text-emerald-400">Leadership & Ownership</span>
+            <h4 class="text-sm font-bold text-white">Overcoming a Project Delay Under Pressure</h4>
+            <p class="text-xs text-gray-400">Demonstrate risk mitigation, transparent stakeholder communication, and resource prioritization.</p>
+            <button type="button" onclick="window.openMockWithCategory('HR')" class="mt-2 text-xs font-bold text-[#A99AF5] hover:underline cursor-pointer">
+              Practice Behavioral Prompt →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION D: Mixed Interview Features -->
+      <div id="stu-sec-mixed" class="stu-section hidden space-y-6">
+        <div class="glass-card p-6 rounded-3xl space-y-4">
+          <div class="flex items-center justify-between pb-3 border-b border-white/10">
+            <div>
+              <h3 class="text-base font-bold text-white">Full-Length 360° Mixed Simulation</h3>
+              <p class="text-xs text-[#94A3B8]">Mirrors realistic final-round enterprise interview panels.</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#0284C7]/20 text-[#38BDF8]">
+              5 Non-Repeating Mixed Scenarios
+            </span>
+          </div>
+          <p class="text-xs text-gray-300 leading-relaxed">
+            In this session, you will be evaluated across architectural vision, live production triage, and cross-functional leadership.
+          </p>
+          <button type="button" onclick="window.openMockWithCategory('Mixed')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#6655D9] to-[#38BDF8] text-white font-bold text-xs shadow-button cursor-pointer">
+            Begin Full 360° Mixed Interview Session
+          </button>
+        </div>
+      </div>
+
+      <!-- SECTION E: Performance Analytics -->
+      <div id="stu-sec-analytics" class="stu-section hidden space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div>
+            <h3 class="text-lg font-black text-white">Comprehensive Performance Analytics</h3>
+            <p class="text-xs text-[#94A3B8]">0–10 Objective rubric metrics aggregated across past practice sessions.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-3xl glass-card space-y-4">
+            <span class="text-xs font-bold text-[#A99AF5] uppercase">Technical Accuracy</span>
+            <div class="text-3xl font-black text-white">9.1 <span class="text-xs text-[#94A3B8]">/ 10</span></div>
+            <div class="w-full bg-[#0A0C14] h-2 rounded-full overflow-hidden">
+              <div class="bg-gradient-to-r from-[#6655D9] to-[#A99AF5] h-full" style="width: 91%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Exceptional accuracy on algorithms and database concurrency.</p>
+          </div>
+
+          <div class="p-6 rounded-3xl glass-card space-y-4">
+            <span class="text-xs font-bold text-emerald-400 uppercase">Communication Clarity</span>
+            <div class="text-3xl font-black text-white">8.7 <span class="text-xs text-[#94A3B8]">/ 10</span></div>
+            <div class="w-full bg-[#0A0C14] h-2 rounded-full overflow-hidden">
+              <div class="bg-emerald-500 h-full" style="width: 87%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Clear speech cadence and structured answers using bullet points.</p>
+          </div>
+
+          <div class="p-6 rounded-3xl glass-card space-y-4">
+            <span class="text-xs font-bold text-[#38BDF8] uppercase">Problem-Solving Depth</span>
+            <div class="text-3xl font-black text-white">8.5 <span class="text-xs text-[#94A3B8]">/ 10</span></div>
+            <div class="w-full bg-[#0A0C14] h-2 rounded-full overflow-hidden">
+              <div class="bg-[#38BDF8] h-full" style="width: 85%"></div>
+            </div>
+            <p class="text-[11px] text-gray-400">Strong identification of edge cases and cache invalidation bottlenecks.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION F: Interview History -->
+      <div id="stu-sec-history" class="stu-section hidden space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div>
+            <h3 class="text-lg font-black text-white">Interview Practice History</h3>
+            <p class="text-xs text-[#94A3B8]">Review past sessions, question transcripts, and downloadable evaluations.</p>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="p-4 rounded-2xl glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-white">Distributed Rate Limiter & Microservices</h4>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#6655D9]/20 text-[#A99AF5]">Technical</span>
+              </div>
+              <p class="text-xs text-[#94A3B8] mt-0.5">Completed Recently • Duration: 22 mins • Difficulty: Advanced</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-black text-emerald-400">8.9 / 10</span>
+              <button type="button" onclick="window.viewMockReport('Distributed Rate Limiter', '8.9', 'Technical')" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white">
+                View Report
+              </button>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-white">Handling Technical Disagreements with Peers</h4>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400">HR Behavioral</span>
+              </div>
+              <p class="text-xs text-[#94A3B8] mt-0.5">Completed Recently • Duration: 18 mins • Difficulty: Intermediate</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-black text-emerald-400">9.2 / 10</span>
+              <button type="button" onclick="window.viewMockReport('Technical Disagreements with Peers', '9.2', 'HR Behavioral')" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white">
+                View Report
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION G: Skill Improvement -->
+      <div id="stu-sec-skills" class="stu-section hidden space-y-6">
+        <div class="glass-card p-6 rounded-3xl space-y-4">
+          <h3 class="text-base font-bold text-white">Targeted Skill Improvement Roadmap</h3>
+          <p class="text-xs text-[#94A3B8]">AI-curated learning exercises based on identified weak areas from recent interviews.</p>
+          
+          <div class="space-y-3 pt-2">
+            <div class="p-4 rounded-2xl bg-[#0A0C14] border border-white/10 flex items-center justify-between gap-4">
+              <div>
+                <h4 class="text-xs font-bold text-white">1. Master Redis Token Bucket Algorithms</h4>
+                <p class="text-[11px] text-[#94A3B8]">Improves distributed systems concurrency answers.</p>
+              </div>
+              <button type="button" onclick="window.showToast('Drill loaded: Redis Token Bucket practice!', 'info')" class="px-3 py-1.5 rounded-xl bg-[#6655D9] text-xs font-bold text-white">
+                Start Drill
+              </button>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-[#0A0C14] border border-white/10 flex items-center justify-between gap-4">
+              <div>
+                <h4 class="text-xs font-bold text-white">2. Polish STAR Technique Result Metrics</h4>
+                <p class="text-[11px] text-[#94A3B8]">Quantify business impact in behavioral responses with specific % improvements.</p>
+              </div>
+              <button type="button" onclick="window.showToast('Drill loaded: STAR Result Metrics practice!', 'info')" class="px-3 py-1.5 rounded-xl bg-emerald-600 text-xs font-bold text-white">
+                Start Drill
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION H: Personal Profile (DYNAMICALLY SAVED WITH USER'S OWN NAME) -->
+      <div id="stu-sec-profile" class="stu-section hidden space-y-6 max-w-2xl">
+        <div class="glass-card p-6 rounded-3xl space-y-4">
+          <div>
+            <h3 class="text-base font-bold text-white">Personal Profile & Credentials</h3>
+            <p class="text-xs text-[#94A3B8]">Change your name and information anytime. Changes reflect immediately across InterviewIQ.</p>
+          </div>
+
+          <form onsubmit="window.saveStudentProfile(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Your Full Name</label>
+                <input type="text" id="prof-stu-name" placeholder="Enter your full name" required class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#6655D9]">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Email Address</label>
+                <input type="email" id="prof-stu-email" placeholder="Enter your email" required class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#6655D9]">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">College / University</label>
+                <input type="text" id="prof-stu-college" placeholder="e.g. University Candidate" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#6655D9]">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Degree & Branch</label>
+                <input type="text" id="prof-stu-degree" placeholder="e.g. B.Tech Computer Science" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#6655D9]">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Core Technical Skills</label>
+              <div class="flex flex-wrap gap-1.5 p-2 bg-[#0A0C14] border border-white/10 rounded-xl">
+                <span class="px-2 py-0.5 rounded bg-[#161B2E] text-xs text-[#A99AF5]">React.js</span>
+                <span class="px-2 py-0.5 rounded bg-[#161B2E] text-xs text-[#A99AF5]">Node.js</span>
+                <span class="px-2 py-0.5 rounded bg-[#161B2E] text-xs text-[#A99AF5]">Python</span>
+                <span class="px-2 py-0.5 rounded bg-[#161B2E] text-xs text-[#A99AF5]">System Design</span>
+                <span class="px-2 py-0.5 rounded bg-[#161B2E] text-xs text-[#A99AF5]">PostgreSQL</span>
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 text-xs font-bold rounded-xl bg-[#6655D9] text-white hover:bg-[#5542C6] transition-all shadow-button cursor-pointer">
+                Save Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         5. COMPANY DASHBOARD (view-company)
+         ========================================================================= -->
+    <div id="view-company" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-[#0284C7]/20 text-[#38BDF8] border border-[#0284C7]/40">
+              Company ATS Hub
+            </span>
+            <span class="text-xs text-emerald-400 font-semibold">● Verified Enterprise Account</span>
+          </div>
+          <h2 id="company-welcome-heading" class="text-2xl sm:text-3xl font-black text-white mt-1">
+            TechPulse Cloud Solutions
+          </h2>
+          <p id="company-welcome-sub" class="text-xs text-[#94A3B8]">
+            Enterprise Cloud Infrastructure & AI Platforms
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="window.setCompanySection('create-interview')" 
+            class="px-4 py-2 text-xs font-bold rounded-xl bg-[#0284C7] text-white hover:bg-[#0369a1] transition-all shadow-button flex items-center gap-1.5 cursor-pointer active:scale-95"
+          >
+            <span>+ Create Interview</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="window.logout()" 
+            class="px-3.5 py-2 text-xs font-semibold rounded-xl bg-white/5 hover:bg-rose-500/20 text-gray-300 hover:text-rose-300 border border-white/10 cursor-pointer"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Feature Navigation Tabs (5 Features) -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-white/10">
+        <button type="button" onclick="window.setCompanySection('overview')" id="comp-tab-overview" class="comp-nav-tab px-4 py-2 rounded-xl text-xs font-bold bg-[#0284C7] text-white transition-all cursor-pointer">
+          1. Overview
+        </button>
+        <button type="button" onclick="window.setCompanySection('create-interview')" id="comp-tab-create-interview" class="comp-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          2. Create Interview
+        </button>
+        <button type="button" onclick="window.setCompanySection('manage-candidates')" id="comp-tab-manage-candidates" class="comp-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          3. Manage Candidates
+        </button>
+        <button type="button" onclick="window.setCompanySection('interview-mgmt')" id="comp-tab-interview-mgmt" class="comp-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          4. Interview Management
+        </button>
+        <button type="button" onclick="window.setCompanySection('company-profile')" id="comp-tab-company-profile" class="comp-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+          5. Company Profile
+        </button>
+      </div>
+
+      <!-- FEATURE 1: Overview -->
+      <div id="comp-sec-overview" class="comp-section space-y-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Total Candidates</span>
+            <p id="comp-metric-total-cand" class="text-3xl font-black text-white mt-1">48</p>
+            <span class="text-[10px] text-emerald-400 font-bold">+12 this month</span>
+          </div>
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Active Interviews</span>
+            <p id="comp-metric-active-int" class="text-3xl font-black text-[#38BDF8] mt-1">14</p>
+            <span class="text-[10px] text-cyan-400 font-bold">In progress now</span>
+          </div>
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Completed Interviews</span>
+            <p id="comp-metric-completed-int" class="text-3xl font-black text-emerald-400 mt-1">32</p>
+            <span class="text-[10px] text-gray-400">Evaluated with AI</span>
+          </div>
+          <div class="p-5 rounded-2xl glass-card">
+            <span class="text-xs font-semibold text-[#94A3B8]">Average Candidate Score</span>
+            <p id="comp-metric-avg-score" class="text-3xl font-black text-[#A99AF5] mt-1">8.4 <span class="text-sm font-normal text-gray-400">/ 10</span></p>
+            <span class="text-[10px] text-emerald-400 font-bold">High Talent Quality</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 glass-card p-6 rounded-3xl space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-white/10">
+              <h3 class="text-base font-bold text-white">Recruitment Pipeline Funnel</h3>
+              <span class="text-xs text-[#94A3B8]">Live ATS Stages</span>
+            </div>
+            
+            <div class="space-y-3 pt-2">
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-gray-300 mb-1">
+                  <span>Applied Candidates</span>
+                  <span class="text-white font-bold">48 (100%)</span>
+                </div>
+                <div class="w-full bg-[#0A0C14] h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-gradient-to-r from-[#0284C7] to-[#38BDF8] h-full" style="width: 100%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-gray-300 mb-1">
+                  <span>Screened with AI Rubric</span>
+                  <span class="text-white font-bold">32 (67%)</span>
+                </div>
+                <div class="w-full bg-[#0A0C14] h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-gradient-to-r from-[#6655D9] to-[#A99AF5] h-full" style="width: 67%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs font-semibold text-gray-300 mb-1">
+                  <span>Shortlisted for Final Round</span>
+                  <span class="text-white font-bold">14 (29%)</span>
+                </div>
+                <div class="w-full bg-[#0A0C14] h-2.5 rounded-full overflow-hidden">
+                  <div class="bg-emerald-500 h-full" style="width: 29%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card p-6 rounded-3xl flex flex-col justify-between">
+            <div class="space-y-3">
+              <h3 class="text-base font-bold text-white">Quick Interview Creation</h3>
+              <p class="text-xs text-[#94A3B8] leading-relaxed">
+                Design custom questions tailored to your tech stack and invite candidates with 1 click.
+              </p>
+            </div>
+            <button type="button" onclick="window.setCompanySection('create-interview')" class="w-full mt-4 py-3 px-4 text-xs font-bold rounded-xl bg-[#0284C7] text-white hover:bg-[#0369a1] transition-all shadow-button">
+              Create New Interview →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 2: Create Interview -->
+      <div id="comp-sec-create-interview" class="comp-section hidden space-y-6 max-w-3xl">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
+          <div class="pb-4 border-b border-white/10">
+            <h3 class="text-lg font-black text-white">Create New Interview Campaign</h3>
+            <p class="text-xs text-[#94A3B8]">Configure job roles, technical requirements, and custom question counts.</p>
+          </div>
+
+          <form onsubmit="window.handleCreateInterview(event)" class="space-y-4">
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Interview Title</label>
+              <input 
+                type="text" 
+                id="int-create-title" 
+                placeholder="e.g. Senior Full Stack Cloud Engineer Round" 
+                required 
+                class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+              >
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Job Role</label>
+              <input 
+                type="text" 
+                id="int-create-role" 
+                placeholder="e.g. Full Stack AI Engineer" 
+                required 
+                class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+              >
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Required Skills (comma separated)</label>
+              <input 
+                type="text" 
+                id="int-create-skills" 
+                placeholder="e.g. React.js, Node.js, Python, PostgreSQL, System Design" 
+                required 
+                class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+              >
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Experience Level</label>
+                <select id="int-create-exp" class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#38BDF8]">
+                  <option value="Entry Level (0-2 yrs)">Entry Level (0-2 yrs)</option>
+                  <option value="Mid Level (2-5 yrs)" selected>Mid Level (2-5 yrs)</option>
+                  <option value="Senior Level (5+ yrs)">Senior Level (5+ yrs)</option>
+                  <option value="Lead / Staff Architect">Lead / Staff Architect</option>
+                </select>
+              </div>
+
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Interview Type</label>
+                <select id="int-create-type" class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#38BDF8]">
+                  <option value="Technical Interview">Technical Interview</option>
+                  <option value="HR & Behavioral">HR & Behavioral</option>
+                  <option value="Mixed Assessment">Mixed Assessment</option>
+                  <option value="System Architecture">System Architecture</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Number of Questions</label>
+              <input 
+                type="number" 
+                id="int-create-qcount" 
+                min="1" 
+                max="15" 
+                value="5" 
+                required 
+                class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white placeholder-gray-500 outline-none focus:border-[#38BDF8]"
+              >
+            </div>
+
+            <div class="pt-4 flex justify-end gap-3">
+              <button 
+                type="button" 
+                onclick="window.setCompanySection('overview')" 
+                class="px-5 py-3 rounded-xl border border-white/10 text-xs font-semibold text-[#94A3B8] hover:text-white"
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit" 
+                class="px-6 py-3 rounded-xl bg-[#0284C7] hover:bg-[#0369a1] text-white text-xs font-bold shadow-button transition-all cursor-pointer active:scale-95"
+              >
+                Create Interview
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- FEATURE 3: Manage Candidates -->
+      <div id="comp-sec-manage-candidates" class="comp-section hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+          <div>
+            <h3 class="text-lg font-black text-white">Manage Candidates</h3>
+            <p class="text-xs text-[#94A3B8]">Review applicant resumes, test scores, and interview statuses.</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+            ℹ️ Sample candidate data for frontend demonstration
+          </span>
+        </div>
+
+        <!-- Candidate Table -->
+        <div class="glass-card rounded-3xl overflow-hidden border border-white/10">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[#0A0C14] text-[#94A3B8] uppercase text-[10px] font-bold tracking-wider border-b border-white/10">
+                <tr>
+                  <th class="py-3 px-4">Candidate Name</th>
+                  <th class="py-3 px-4">Email</th>
+                  <th class="py-3 px-4">Applied Role</th>
+                  <th class="py-3 px-4">Interview Status</th>
+                  <th class="py-3 px-4">Score</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="candidate-table-body" class="divide-y divide-white/5 text-gray-200">
+                <!-- Dynamically filled with realistic candidate entries -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEATURE 4: Interview Management -->
+      <div id="comp-sec-interview-mgmt" class="comp-section hidden space-y-6">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <div>
+            <h3 class="text-lg font-black text-white">Interview Management</h3>
+            <p class="text-xs text-[#94A3B8]">View, modify, remove, and analyze candidate results for created interviews.</p>
+          </div>
+          <button type="button" onclick="window.setCompanySection('create-interview')" class="px-4 py-2 text-xs font-bold rounded-xl bg-[#0284C7] text-white">
+            + New Interview
+          </button>
+        </div>
+
+        <div id="created-interviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Dynamic cards injected via JavaScript -->
+        </div>
+      </div>
+
+      <!-- FEATURE 5: Company Profile -->
+      <div id="comp-sec-company-profile" class="comp-section hidden space-y-6 max-w-2xl">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl space-y-6">
+          <div class="pb-4 border-b border-white/10">
+            <h3 class="text-lg font-black text-white">Company Profile & Recruiter Credentials</h3>
+            <p class="text-xs text-[#94A3B8]">Manage your verified company details visible to candidates.</p>
+          </div>
+
+          <form onsubmit="window.saveCompanyProfile(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Company Name</label>
+                <input type="text" id="prof-comp-name" value="TechPulse Cloud Solutions" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Recruiter Name</label>
+                <input type="text" id="prof-comp-recruiter" value="Sarah Jenkins" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Official Email</label>
+              <input type="email" id="prof-comp-email" value="recruiter@techpulse.io" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Industry</label>
+                <input type="text" id="prof-comp-industry" value="Enterprise Cloud & AI Developer Tools" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+              </div>
+              <div class="space-y-1">
+                <label class="block text-xs font-semibold text-gray-300">Website</label>
+                <input type="text" id="prof-comp-website" value="https://techpulse.io" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label class="block text-xs font-semibold text-gray-300">Company Details / Overview</label>
+              <textarea id="prof-comp-details" rows="3" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white resize-none">Next-generation cloud infrastructure orchestration and developer toolchain platform supporting over 100,000 engineering teams globally.</textarea>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 text-xs font-bold rounded-xl bg-[#0284C7] text-white hover:bg-[#0369a1] transition-all shadow-button">
+                Save Company Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         6. MARKETING LANDING PAGE (view-landing)
+         ========================================================================= -->
+    <div id="view-landing" class="view-panel hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+      
+      <section class="text-center max-w-4xl mx-auto space-y-6 pt-4">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1e1b4b] border border-[#6655D9]/40">
+          <span class="w-2 h-2 rounded-full bg-[#38BDF8] animate-ping"></span>
+          <span class="text-xs font-extrabold text-[#A99AF5] uppercase tracking-wider">
+            ✦ AI-POWERED INTERVIEW INTELLIGENCE ✦
+          </span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.08]">
+          Practice. Prepare. Perform.<br>
+          <span class="gradient-text">Get Hired.</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-[#94A3B8] max-w-2xl mx-auto font-normal leading-relaxed">
+          Master technical, HR, and behavioral interviews with real-time AI voice evaluation. Connect directly with verified recruiters through transparent, skill-first candidate screening.
+        </p>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <button type="button" onclick="window.goToActiveDashboard()" class="w-full sm:w-auto px-8 py-4 text-base font-bold rounded-2xl bg-[#6655D9] text-white hover:bg-[#5542C6] transition-all shadow-button flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+            <span>Get Started / Go to Dashboard</span>
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </button>
+
+          <button type="button" onclick="window.openMockWithCategory('Technical')" class="w-full sm:w-auto px-7 py-4 text-base font-bold rounded-2xl bg-[#161B2E] text-white border border-white/15 hover:border-[#38BDF8] hover:text-[#38BDF8] transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+            <span>Try AI Mock Room Demo</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- DARK CONTINUOUS MARQUEE BRAND SLIDER -->
+      <section class="py-8 border-y border-white/10 bg-[#0E111C] overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8">
+        <div class="animate-marquee flex items-center gap-12 sm:gap-16">
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#38BDF8]"></span> Google Cloud
+          </div>
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#A99AF5]"></span> Microsoft Azure
+          </div>
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#38BDF8]"></span> Amazon AWS
+          </div>
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#A99AF5]"></span> Meta AI
+          </div>
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#38BDF8]"></span> Netflix Platform
+          </div>
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#A99AF5]"></span> Uber Scale
+          </div>
+          <div class="flex items-center gap-2 font-black text-sm text-gray-300">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#38BDF8]"></span> Stripe Core
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- =========================================================================
+         7. LIVE AI MOCK ROOM (view-mock-room) - WITH NON-REPEATING QUESTIONS
+         ========================================================================= -->
+    <div id="view-mock-room" class="view-panel hidden max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      
+      <!-- Room Header -->
+      <div class="flex items-center justify-between p-4 rounded-2xl bg-[#161B2E] text-white border border-white/10 shadow-lg">
+        <div class="flex items-center gap-3">
+          <!-- Back to Dashboard button so candidate is never lost -->
+          <button type="button" onclick="window.goToActiveDashboard()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition-colors cursor-pointer flex items-center gap-1.5" title="Exit Room">
+            <span>← Exit to Dashboard</span>
+          </button>
+          <div>
+            <h3 id="mock-category-label" class="text-sm font-bold text-white">Technical Architecture Mock Session</h3>
+            <p class="text-xs text-[#94A3B8] font-mono">
+              Question <span id="current-q-index" class="text-[#38BDF8] font-bold">1</span> of <span id="total-q-count">5</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span id="room-timer" class="px-3 py-1 rounded-lg bg-[#0A0C14] text-xs font-mono font-bold text-[#38BDF8] border border-white/10">
+            15:00
+          </span>
+          <button type="button" onclick="window.speakQuestion()" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer" title="Read Question Aloud (Voice)">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Question Prompt Card (DYNAMIC NON-REPEATING QUESTION) -->
+      <div class="glass-card rounded-3xl p-6 space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-white/10">
+          <span class="text-xs font-bold text-[#A99AF5] uppercase tracking-wider">Interviewer Prompt</span>
+          <span id="mock-diff-badge" class="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+            Advanced Difficulty
+          </span>
+        </div>
+        <h2 id="mock-question-text" class="text-lg sm:text-xl font-bold text-white leading-relaxed">
+          "Loading interview question..."
+        </h2>
+        <div class="p-3.5 bg-[#1e1b4b]/60 rounded-xl text-xs text-purple-200 border border-[#6655D9]/30 flex items-center gap-2">
+          <span class="text-base shrink-0">💡</span>
+          <span><strong>Rubric Focus:</strong> <span id="mock-tip-text">Explain core architectural and design trade-offs.</span></span>
+        </div>
+      </div>
+
+      <!-- Answer Input & Audio Recording -->
+      <div class="glass-card rounded-3xl p-6 space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b border-white/10">
+          <span class="text-xs font-bold text-white">Your Spoken or Written Response:</span>
+          
+          <button type="button" id="btn-mic" onclick="window.toggleMic()" class="px-4 py-1.5 text-xs font-bold rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30 transition-colors flex items-center gap-2 cursor-pointer">
+            <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+            <span id="mic-label">Record Voice Answer</span>
+          </button>
+        </div>
+
+        <textarea id="answer-input" rows="5" class="w-full text-xs sm:text-sm p-4 bg-[#0A0C14] border border-white/10 rounded-2xl text-gray-200 focus:border-[#6655D9] focus:ring-2 focus:ring-[#6655D9]/30 outline-none leading-relaxed resize-none" placeholder="Click 'Record Voice Answer' to speak into your microphone or type your response here..."></textarea>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button type="button" onclick="window.prefillAnswer()" class="text-xs font-bold text-[#38BDF8] hover:underline cursor-pointer">
+            + Prefill Ideal Answer for this Question (1-Click Demo)
+          </button>
+
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="window.clearAnswer()" class="px-4 py-2.5 text-xs font-semibold rounded-xl text-[#94A3B8] hover:text-white hover:bg-white/5 transition-colors cursor-pointer">
+              Clear
+            </button>
+            <button type="button" onclick="window.submitMockAnswer()" class="px-6 py-2.5 text-xs font-bold rounded-xl bg-[#6655D9] text-white hover:bg-[#5542C6] transition-all shadow-button cursor-pointer flex items-center gap-1.5 active:scale-95">
+              <span>Evaluate Answer</span>
+              <span>✨</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evaluation Result Card (DYNAMIC BREAKDOWN TAILORED TO QUESTION) -->
+      <div id="evaluation-card" class="hidden glass-card rounded-3xl border-emerald-500/40 p-6 space-y-5">
+        <div class="flex items-center justify-between pb-4 border-b border-emerald-500/20">
+          <div>
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">AI Rubric Evaluation Ready</span>
+            <h3 id="eval-score-text" class="text-lg font-black text-white mt-0.5">Overall Rubric Score: 9.1 / 10</h3>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            Placement Ready
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-3.5 rounded-xl bg-[#0A0C14] border border-white/10">
+            <span class="text-[11px] font-semibold text-[#94A3B8]">Technical / Domain Accuracy</span>
+            <p id="eval-accuracy-score" class="text-lg font-black text-[#A99AF5]">9.2 / 10</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0A0C14] border border-white/10">
+            <span class="text-[11px] font-semibold text-[#94A3B8]">Relevance & Precision</span>
+            <p id="eval-relevance-score" class="text-lg font-black text-emerald-400">9.0 / 10</p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-[#0A0C14] border border-white/10">
+            <span class="text-[11px] font-semibold text-[#94A3B8]">Communication Clarity</span>
+            <p id="eval-clarity-score" class="text-lg font-black text-[#38BDF8]">8.9 / 10</p>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-[#0A0C14] border border-emerald-500/20 text-xs text-gray-300 space-y-1 leading-relaxed">
+          <p class="font-bold text-emerald-400">Interviewer Rubric Breakdown:</p>
+          <p id="eval-feedback-text">Detailed evaluation will display here.</p>
+        </div>
+
+        <div class="flex justify-between items-center pt-2">
+          <button type="button" onclick="window.goToActiveDashboard()" class="text-xs text-[#94A3B8] hover:text-white cursor-pointer">
+            ← Save & Return to Dashboard
+          </button>
+          <button type="button" onclick="window.nextQuestion()" class="px-6 py-2.5 text-xs font-bold rounded-xl bg-[#6655D9] text-white hover:bg-[#5542C6] transition-colors cursor-pointer flex items-center gap-1.5 shadow-button">
+            <span>Proceed to Next Question (Never Repeats)</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODALS ==================== -->
+
+  <!-- 1. Forgot Password Modal -->
+  <div id="forgot-password-modal" class="fixed inset-0 z-50 hidden bg-[#0A0C14]/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-dark rounded-3xl max-w-md w-full p-6 border border-white/15 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h3 class="text-base font-bold text-white">Reset Password</h3>
+        <button type="button" onclick="window.closeModal('forgot-password-modal')" class="text-[#94A3B8] hover:text-white p-1 cursor-pointer">✕</button>
+      </div>
+      <p class="text-xs text-[#94A3B8]">
+        Enter your registered email address below. We'll send instructions to reset your password.
+      </p>
+      <div class="space-y-1">
+        <label class="block text-xs font-semibold text-gray-300">Email Address</label>
+        <input type="email" id="forgot-email-input" placeholder="e.g. name@example.com" class="w-full p-3 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white outline-none focus:border-[#6655D9]">
+      </div>
+      <div class="flex justify-end gap-2 pt-2 border-t border-white/10">
+        <button type="button" onclick="window.closeModal('forgot-password-modal')" class="px-4 py-2 text-xs rounded-xl border border-white/10 text-[#94A3B8] hover:text-white cursor-pointer">
+          Cancel
+        </button>
+        <button type="button" onclick="window.submitForgotPassword()" class="px-5 py-2 text-xs font-bold rounded-xl bg-[#6655D9] text-white hover:bg-[#5542C6] cursor-pointer">
+          Send Reset Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Candidate Details Modal -->
+  <div id="candidate-detail-modal" class="fixed inset-0 z-50 hidden bg-[#0A0C14]/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-dark rounded-3xl max-w-lg w-full p-6 border border-white/15 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div>
+          <h3 id="modal-cand-name" class="text-base font-bold text-white">Candidate Details</h3>
+          <p id="modal-cand-email" class="text-xs text-[#94A3B8]">email@example.com</p>
+        </div>
+        <button type="button" onclick="window.closeModal('candidate-detail-modal')" class="text-[#94A3B8] hover:text-white p-1 cursor-pointer">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-gray-300">
+        <div class="flex justify-between py-1 border-b border-white/5">
+          <span class="text-[#94A3B8]">Applied Role:</span>
+          <span id="modal-cand-role" class="font-bold text-white">Full Stack AI Engineer</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-white/5">
+          <span class="text-[#94A3B8]">Interview Status:</span>
+          <span id="modal-cand-status" class="font-bold text-emerald-400">Shortlisted</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-white/5">
+          <span class="text-[#94A3B8]">Rubric Evaluation Score:</span>
+          <span id="modal-cand-score" class="font-black text-[#A99AF5]">8.9 / 10</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-[#0A0C14] border border-white/10 text-[11px] leading-relaxed">
+          <p class="font-bold text-[#38BDF8] mb-1">AI Match Summary:</p>
+          <p>Candidate demonstrates exceptional depth in scalable architecture, Node.js microservices, and React performance optimization.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-white/10">
+        <button type="button" onclick="window.closeModal('candidate-detail-modal')" class="px-4 py-2 text-xs rounded-xl border border-white/10 text-[#94A3B8] hover:text-white cursor-pointer">
+          Close
+        </button>
+        <button type="button" onclick="window.sendCandidateInvite()" class="px-5 py-2 text-xs font-bold rounded-xl bg-[#0284C7] text-white hover:bg-[#0369a1] cursor-pointer">
+          Send Next Round Invite
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Edit Interview Modal -->
+  <div id="edit-interview-modal" class="fixed inset-0 z-50 hidden bg-[#0A0C14]/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-dark rounded-3xl max-w-lg w-full p-6 border border-white/15 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <h3 class="text-base font-bold text-white">Edit Interview Campaign</h3>
+        <button type="button" onclick="window.closeModal('edit-interview-modal')" class="text-[#94A3B8] hover:text-white p-1 cursor-pointer">✕</button>
+      </div>
+
+      <input type="hidden" id="edit-int-id">
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Interview Title</label>
+          <input type="text" id="edit-int-title" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Job Role</label>
+          <input type="text" id="edit-int-role" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Required Skills</label>
+          <input type="text" id="edit-int-skills" class="w-full p-2.5 bg-[#0A0C14] border border-white/10 rounded-xl text-xs text-white">
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2 border-t border-white/10">
+        <button type="button" onclick="window.closeModal('edit-interview-modal')" class="px-4 py-2 text-xs rounded-xl border border-white/10 text-[#94A3B8] hover:text-white cursor-pointer">
+          Cancel
+        </button>
+        <button type="button" onclick="window.saveEditedInterview()" class="px-5 py-2 text-xs font-bold rounded-xl bg-[#0284C7] text-white hover:bg-[#0369a1] cursor-pointer">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Mock Report Modal -->
+  <div id="mock-report-modal" class="fixed inset-0 z-50 hidden bg-[#0A0C14]/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="glass-dark rounded-3xl max-w-lg w-full p-6 border border-white/15 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-white/10">
+        <div>
+          <span class="text-[10px] font-bold uppercase text-[#A99AF5]">Comprehensive Evaluation Report</span>
+          <h3 id="report-modal-title" class="text-base font-bold text-white">Mock Session Breakdown</h3>
+        </div>
+        <button type="button" onclick="window.closeModal('mock-report-modal')" class="text-[#94A3B8] hover:text-white p-1 cursor-pointer">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-gray-300">
+        <div class="p-3 rounded-xl bg-[#0A0C14] border border-white/10 flex justify-between items-center">
+          <span>Overall Rubric Score:</span>
+          <span id="report-modal-score" class="text-lg font-black text-emerald-400">8.9 / 10</span>
+        </div>
+        <div class="space-y-1">
+          <p class="font-bold text-white">Strong Highlights:</p>
+          <p class="text-gray-400">• Clear distinction between token bucket rate limiting and local caches.</p>
+          <p class="text-gray-400">• High vocal confidence and structured STAR storytelling.</p>
+        </div>
+        <div class="space-y-1">
+          <p class="font-bold text-amber-400">Recommendations:</p>
+          <p class="text-gray-400">• Quantify network partition recovery times more explicitly.</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-white/10">
+        <button type="button" onclick="window.closeModal('mock-report-modal')" class="px-4 py-2 text-xs font-bold rounded-xl bg-[#6655D9] text-white cursor-pointer">
+          Close Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== DARK FOOTER ==================== -->
+  <footer class="mt-20 border-t border-white/10 py-10 text-center text-xs text-[#94A3B8] bg-[#0E111C]">
+    <div class="max-w-7xl mx-auto px-4 space-y-2">
+      <p class="font-extrabold text-white text-sm">
+        Interview<span class="text-[#38BDF8]">IQ</span> – Practice. Prepare. Perform. Get Hired.
+      </p>
+      <p>© 2026 InterviewIQ AI Intelligence Platform. Continuous Session Stability Active.</p>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       COMPREHENSIVE CLIENT JAVASCRIPT & QUESTION BANK ENGINE
+       ========================================================================= -->
+  <script>
+    // ==============================================================
+    // 1. QUESTION BANK - 15+ UNIQUE, NON-REPEATING QUESTIONS
+    // ==============================================================
+    var QUESTION_BANK = [
+      // --- TECHNICAL INTERVIEW QUESTIONS ---
+      {
+        id: 'tech_01',
+        category: 'Technical',
+        topic: 'System Design & Distributed Caching',
+        difficulty: 'Advanced',
+        question: 'How would you architect a horizontally scalable distributed rate limiter that handles 100,000 requests per second across multiple data centers?',
+        tip: 'Mention Token Bucket algorithm, Redis cluster with Lua scripts, and local memory caching.',
+        idealAnswer: 'I would implement a hybrid rate limiter using the Token Bucket algorithm with local in-memory token caches in each API gateway combined with Redis cluster Lua scripts for atomic synchronization. Cross-region coordination is managed via eventual consistency and edge rate limiting at the CDN level.',
+        rubricBreakdown: 'Exemplary architectural depth. Clearly addressed race conditions, edge caching, and multi-region network partition fallbacks.',
+        scores: { accuracy: 9.3, relevance: 9.0, comm: 8.8, overall: 9.1 }
+      },
+      {
+        id: 'tech_02',
+        category: 'Technical',
+        topic: 'JavaScript Engine & Concurrency',
+        difficulty: 'Intermediate',
+        question: 'Can you explain the Event Loop in JavaScript and how microtasks differ from macrotasks in the execution order?',
+        tip: 'Explain Call Stack, Microtask queue (Promises, queueMicrotask), and Macrotask queue (setTimeout, setInterval).',
+        idealAnswer: 'The Event Loop coordinates between the call stack, microtask queue, and macrotask queue. Microtasks (like resolved Promise callbacks) take absolute priority and are completely drained immediately after the current stack frame finishes and before the browser renders the next frame.',
+        rubricBreakdown: 'Accurate distinction between resolved promise ticks, microtask exhaustion, and timer scheduling in browser runtimes.',
+        scores: { accuracy: 9.2, relevance: 8.8, comm: 8.7, overall: 8.9 }
+      },
+      {
+        id: 'tech_03',
+        category: 'Technical',
+        topic: 'Database Internals & Indexing',
+        difficulty: 'Advanced',
+        question: 'What happens under the hood when a database executes a query using a B-Tree index versus a Hash index, and how do composite indexes affect query planning?',
+        tip: 'Explain O(log N) tree traversal vs O(1) hash lookups, range scans, and leftmost prefix rule.',
+        idealAnswer: 'B-Trees store keys in balanced tree nodes allowing O(log N) point and range queries. Hash indexes give O(1) equality lookups but cannot do range scans or sorting. For composite indexes on (A, B), queries must match the leftmost prefix to use the index efficiently.',
+        rubricBreakdown: 'Superb mastery of relational storage engines, leaf page splits, and query cost optimization.',
+        scores: { accuracy: 9.4, relevance: 9.1, comm: 8.9, overall: 9.2 }
+      },
+      {
+        id: 'tech_04',
+        category: 'Technical',
+        topic: 'API Resilience & Idempotency',
+        difficulty: 'Advanced',
+        question: 'How do you design payment and financial transaction APIs to guarantee idempotency and prevent duplicate charges during network failures?',
+        tip: 'Discuss Idempotency-Key headers, Redis distributed locks, ACID transactions, and cached responses.',
+        idealAnswer: 'Require client-generated UUID Idempotency-Key headers. Use Redis distributed locking while processing, ACID transactions for commit, and cache response payloads for 24 hours so retried requests return the identical result without re-billing.',
+        rubricBreakdown: 'Flawless coverage of distributed locking, financial duplicate charge prevention, and retry semantics.',
+        scores: { accuracy: 9.5, relevance: 9.3, comm: 9.0, overall: 9.3 }
+      },
+      {
+        id: 'tech_05',
+        category: 'Technical',
+        topic: 'Backend Concurrency & Locking',
+        difficulty: 'Advanced',
+        question: 'What strategies do you employ to prevent race conditions and deadlocks in highly concurrent backend services accessing shared state?',
+        tip: 'Discuss optimistic locking (versioning), pessimistic locking (SELECT FOR UPDATE), and deterministic lock ordering.',
+        idealAnswer: 'Use optimistic locking with version columns for low contention, SELECT FOR UPDATE or distributed Redlock for high contention, and enforce strict deterministic resource ordering to prevent cyclic deadlocks.',
+        rubricBreakdown: 'Precise differentiation between lock-free atomic CAS operations and deadlock graph cycle prevention.',
+        scores: { accuracy: 9.1, relevance: 8.9, comm: 8.7, overall: 8.9 }
+      },
+
+      // --- HR & BEHAVIORAL QUESTIONS ---
+      {
+        id: 'hr_01',
+        category: 'HR',
+        topic: 'Constructive Collaboration & Conflict',
+        difficulty: 'Intermediate',
+        question: 'Tell me about a time you had a strong technical disagreement with a senior engineer or team lead. How did you handle it and what was the outcome?',
+        tip: 'Structure response with Situation, Task, Action, Result (STAR). Focus on objective data over personal opinion.',
+        idealAnswer: 'When our lead proposed a NoSQL database for financial audit logs, I benchmarked PostgreSQL vs Mongo under network partition. The data proved ACID guarantees were essential. We reviewed the numbers collaboratively, adopted Postgres, and achieved 100% audit accuracy.',
+        rubricBreakdown: 'Outstanding STAR delivery. Emphasized objective data benchmarks and respectful team collaboration over personal ego.',
+        scores: { accuracy: 9.0, relevance: 9.2, comm: 9.4, overall: 9.2 }
+      },
+      {
+        id: 'hr_02',
+        category: 'HR',
+        topic: 'Ownership & Crisis Management',
+        difficulty: 'Intermediate',
+        question: 'Describe a situation where a critical product launch deadline was at risk due to unforeseen bugs. How did you prioritize and deliver?',
+        tip: 'Explain severity triage, stakeholder transparency, feature-flagging non-critical code, and calm execution.',
+        idealAnswer: '48 hours before an enterprise launch, a memory leak surfaced. I notified leadership, set up a war room, isolated uncleaned websocket listeners, and feature-flagged secondary animations. We deployed on schedule with zero customer incidents.',
+        rubricBreakdown: 'Exemplary leadership under pressure and transparent executive stakeholder communication.',
+        scores: { accuracy: 8.9, relevance: 9.1, comm: 9.2, overall: 9.1 }
+      },
+      {
+        id: 'hr_03',
+        category: 'HR',
+        topic: 'Accountability & Continuous Improvement',
+        difficulty: 'Intermediate',
+        question: 'Tell me about a mistake you made that impacted production or team delivery. What did you learn and what safeguards did you put in place?',
+        tip: 'Own the mistake fully without blame. Explain blameless post-mortem and automated CI/CD prevention.',
+        idealAnswer: 'I once deployed a migration missing an index on a foreign key, causing connection pool exhaustion. I immediately rolled back, conducted a blameless post-mortem, and added an automated CI linter that blocks unindexed foreign key migrations.',
+        rubricBreakdown: 'High accountability and mature transformation of an outage into permanent automated CI/CD guardrails.',
+        scores: { accuracy: 9.3, relevance: 9.4, comm: 9.1, overall: 9.3 }
+      },
+      {
+        id: 'hr_04',
+        category: 'HR',
+        topic: 'Adaptability & Shifting Requirements',
+        difficulty: 'Intermediate',
+        question: 'How do you proceed when tasked with delivering an urgent feature with incomplete or constantly shifting technical specifications?',
+        tip: 'Focus on short alignment syncs, building modular interfaces, and clarifying the core user value.',
+        idealAnswer: 'I align with the product owner on the single critical user journey, draft a lightweight RFC listing explicit assumptions, and architect modular adapters so changes only touch the integration layer.',
+        rubricBreakdown: 'Strategic adaptability and exceptional written documentation to de-risk ambiguous projects.',
+        scores: { accuracy: 8.8, relevance: 9.0, comm: 9.1, overall: 9.0 }
+      },
+      {
+        id: 'hr_05',
+        category: 'HR',
+        topic: 'Mentorship & Team Enablement',
+        difficulty: 'Intermediate',
+        question: 'Can you share an experience where you helped onboard, mentor, or upskill a struggling junior teammate or peer?',
+        tip: 'Emphasize empathy, structured pair programming, breaking down tasks, and celebrating small wins.',
+        idealAnswer: 'A junior engineer was struggling with our state architecture. I scheduled daily 30-min pair-programming sessions for two weeks, created visual architectural guides, and paired on small PRs. They soon began independently shipping feature slices.',
+        rubricBreakdown: 'Empathetic leadership and structured enablement resulting in measurable team productivity gains.',
+        scores: { accuracy: 9.1, relevance: 9.3, comm: 9.5, overall: 9.3 }
+      },
+
+      // --- MIXED 360° QUESTIONS ---
+      {
+        id: 'mixed_01',
+        category: 'Mixed',
+        topic: 'Architectural Vision & Business ROI',
+        difficulty: 'Advanced',
+        question: 'Walk me through a major architectural migration you proposed. How did you balance developer velocity against technical debt, and how did you convince leadership?',
+        tip: 'Tie technical refactoring directly to business ROI (cost savings, deployment frequency, reliability).',
+        idealAnswer: 'I proposed extracting our monolithic image processing into serverless Go routines. I presented ROI showing a 60% cloud compute cost reduction and 4x faster CI builds, executing the rollout in phased milestones with feature flags.',
+        rubricBreakdown: 'Flawless balance of executive ROI alignment, risk mitigation, and technical migration execution.',
+        scores: { accuracy: 9.4, relevance: 9.3, comm: 9.2, overall: 9.3 }
+      },
+      {
+        id: 'mixed_02',
+        category: 'Mixed',
+        topic: 'Live Production Incident Triage',
+        difficulty: 'Advanced',
+        question: 'A microservice you own experiences a cascading failure during peak holiday traffic. Walk me through your first 30 minutes of incident response and subsequent customer communication.',
+        tip: 'Follow SRE protocols: incident commander, circuit breakers, metric diagnostics, transparent status page.',
+        idealAnswer: 'First 5 min: Declare incident, assign commander, trigger circuit breaker fallbacks. Min 5-15: Use distributed tracing to isolate query starvation, scale read replicas. Min 15-30: Publish transparent status updates and schedule blameless post-mortem.',
+        rubricBreakdown: 'Professional incident triage adhering to Google SRE principles and transparent stakeholder handling.',
+        scores: { accuracy: 9.3, relevance: 9.4, comm: 9.3, overall: 9.3 }
+      },
+      {
+        id: 'mixed_03',
+        category: 'Mixed',
+        topic: 'Engineering Ethics & Data Privacy',
+        difficulty: 'Advanced',
+        question: 'Suppose product managers ask you to implement telemetry tracking that collects sensitive user data without explicit consent to meet a quarterly KPI. How do you respond?',
+        tip: 'Explain compliance (GDPR/CCPA), user trust, and propose anonymized differential privacy alternatives.',
+        idealAnswer: 'I would diplomatically explain legal GDPR/CCPA exposure and customer trust risks to leadership. Instead of a flat refusal, I would offer an anonymized aggregate tracking model that meets business KPI needs while ensuring 100% privacy compliance.',
+        rubricBreakdown: 'Strong ethical integrity combined with constructive, solution-oriented alternative proposals.',
+        scores: { accuracy: 9.2, relevance: 9.3, comm: 9.4, overall: 9.3 }
+      },
+      {
+        id: 'mixed_04',
+        category: 'Mixed',
+        topic: 'Cross-Functional Design & Performance',
+        difficulty: 'Intermediate',
+        question: 'How do you navigate situations where a UI designer’s vision introduces severe performance bottlenecks or unfeasible technical complexity on mobile devices?',
+        tip: 'Show performance profiler data, explain 60fps frame rate budgets, and co-create hardware-accelerated CSS alternatives.',
+        idealAnswer: 'I review performance profiler timelines with the designer, demonstrating frame drops on budget mobile devices. Together, we implement GPU-accelerated CSS transforms that retain the aesthetic vision while locking 60fps rendering.',
+        rubricBreakdown: 'Constructive cross-functional partnership prioritizing user performance without dismissing design quality.',
+        scores: { accuracy: 9.0, relevance: 9.2, comm: 9.1, overall: 9.1 }
+      },
+      {
+        id: 'mixed_05',
+        category: 'Mixed',
+        topic: 'Pragmatic Scaling & Technical Foresight',
+        difficulty: 'Advanced',
+        question: 'When designing a new service expected to scale from 10,000 to 10 million users in 12 months, what decisions do you make early versus what do you intentionally defer?',
+        tip: 'Discuss solid foundational choices (stateless services, proper indexing) vs avoiding premature complexity (sharding, mesh).',
+        idealAnswer: 'Early on, I establish stateless services behind load balancers, clean indexed relational schemas, and automated CI/CD. I defer multi-region database sharding and complex service meshes until actual query bottlenecks emerge.',
+        rubricBreakdown: 'Senior architectural wisdom: avoiding premature optimization while building solidly scalable foundations.',
+        scores: { accuracy: 9.5, relevance: 9.4, comm: 9.2, overall: 9.4 }
+      }
+    ];
+
+    // Tracking active questions to GUARANTEE non-repetition
+    var activeMockCategory = 'Technical';
+    var askedQuestionIds = [];
+    var currentQuestionObj = null;
+    window.askedQuestionIds = askedQuestionIds;
+    window.currentQuestionObj = currentQuestionObj;
+
+    // Default Demo Users
+    var DEMO_USERS = {
+      student: {
+        id: 'usr_student_01',
+        name: 'Aarav Sharma',
+        email: 'aarav.sharma@example.edu',
+        role: 'student',
+        college: 'Indian Institute of Technology (IIT) Bombay',
+        degree: 'B.Tech Computer Science',
+        graduationYear: 2025,
+        skills: ['React.js', 'Node.js', 'Python', 'System Design', 'PostgreSQL', 'Docker']
+      },
+      company: {
+        id: 'usr_comp_01',
+        name: 'Sarah Jenkins',
+        companyName: 'TechPulse Cloud Solutions',
+        email: 'recruiter@techpulse.io',
+        role: 'company',
+        industry: 'Enterprise Cloud & AI Developer Tools',
+        website: 'https://techpulse.io',
+        location: 'Bengaluru, India / San Francisco, CA'
+      }
+    };
+
+    // Created Interviews in Company ATS
+    var companyInterviews = [
+      {
+        id: 'int_01',
+        title: 'Lead Full Stack Cloud Architect',
+        role: 'Full Stack AI Engineer',
+        skills: 'React.js, Node.js, Python, PostgreSQL, System Design',
+        experience: 'Mid Level (2-5 yrs)',
+        type: 'Technical Interview',
+        questionCount: 5,
+        createdDate: 'Oct 28, 2026'
+      },
+      {
+        id: 'int_02',
+        title: 'Frontend UI/UX Performance Engineer',
+        role: 'Frontend Architect',
+        skills: 'React.js, TypeScript, Tailwind CSS, Web Vitals',
+        experience: 'Mid Level (2-5 yrs)',
+        type: 'Technical Interview',
+        questionCount: 5,
+        createdDate: 'Oct 29, 2026'
+      }
+    ];
+    window.companyInterviews = companyInterviews;
+
+    // Sample candidate database for Company ATS
+    var sampleCandidates = [
+      { name: 'Rohan Verma', email: 'rohan.verma@example.org', role: 'Frontend Architect', status: 'Interview Scheduled', score: '9.1 / 10' },
+      { name: 'Priya Patel', email: 'priya.patel@example.com', role: 'Backend Cloud Engineer', status: 'Under Review', score: '8.2 / 10' },
+      { name: 'Aditya Roy', email: 'aditya.roy@example.edu', role: 'Full Stack AI Engineer', status: 'Shortlisted', score: '8.8 / 10' }
+    ];
+
+    // ==============================================================
+    // 2. SESSION & USER STATE ENGINE (RESPECTS USER'S ACTUAL NAME)
+    // ==============================================================
+    function getStoredUser() {
+      try {
+        var raw = localStorage.getItem('interviewiq_user');
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setStoredUser(user) {
+      if (user) {
+        localStorage.setItem('interviewiq_user', JSON.stringify(user));
+        localStorage.setItem('interviewiq_role', user.role);
+        localStorage.setItem('interviewiq_token', 'jwt_' + user.role + '_' + Date.now());
+      } else {
+        localStorage.removeItem('interviewiq_user');
+        localStorage.removeItem('interviewiq_role');
+        localStorage.removeItem('interviewiq_token');
+      }
+      updateNavAuthState();
+      syncWelcomePageActiveState();
+    }
+
+    // Dynamic Navbar that changes seamlessly based on active user role
+    function updateNavAuthState() {
+      var user = getStoredUser();
+      var navLinksContainer = document.getElementById('main-nav-links');
+      var userBadge = document.getElementById('nav-user-badge');
+      var logoutBtn = document.getElementById('btn-logout');
+      var loggedOutActions = document.getElementById('nav-logged-out-actions');
+      var nameEl = document.getElementById('nav-user-name');
+      var avatarEl = document.getElementById('nav-user-avatar');
+      var rolePill = document.getElementById('nav-user-role-pill');
+
+      if (user) {
+        // Show Badge & Logout Button
+        if (userBadge) {
+          userBadge.classList.remove('hidden');
+          userBadge.classList.add('flex');
+        }
+        if (logoutBtn) logoutBtn.classList.remove('hidden');
+        if (loggedOutActions) loggedOutActions.classList.add('hidden');
+
+        var displayName = user.name || (user.companyName ? user.companyName : 'User');
+        if (nameEl) nameEl.innerText = displayName;
+        if (avatarEl) avatarEl.innerText = displayName.charAt(0).toUpperCase();
+
+        if (rolePill) {
+          rolePill.innerText = user.role.toUpperCase();
+          if (user.role === 'company') {
+            rolePill.className = 'text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#0284C7]/30 text-[#38BDF8] border border-[#0284C7]/40';
+          } else {
+            rolePill.className = 'text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-[#6655D9]/30 text-[#A99AF5] border border-[#6655D9]/40';
+          }
+        }
+
+        // Build Role-Specific Navigation (No confusing cross-role / logout redirects)
+        if (navLinksContainer) {
+          if (user.role === 'student') {
+            navLinksContainer.innerHTML = `
+              <button type="button" onclick="window.switchTab('student')" id="nav-btn-student" class="nav-item text-xs font-bold px-4 py-1.5 rounded-full bg-[#6655D9] text-white shadow-button transition-all cursor-pointer">
+                My Dashboard
+              </button>
+              <button type="button" onclick="window.switchTab('mock-room')" id="nav-btn-mock-room" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                AI Mock Room
+              </button>
+              <button type="button" onclick="window.setStudentSection('technical'); window.switchTab('student');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                Technical Drills
+              </button>
+              <button type="button" onclick="window.setStudentSection('hr'); window.switchTab('student');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                HR Scenarios
+              </button>
+              <button type="button" onclick="window.setStudentSection('profile'); window.switchTab('student');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                Profile
+              </button>
+            `;
+          } else if (user.role === 'company') {
+            navLinksContainer.innerHTML = `
+              <button type="button" onclick="window.switchTab('company')" id="nav-btn-company" class="nav-item text-xs font-bold px-4 py-1.5 rounded-full bg-[#0284C7] text-white shadow-button transition-all cursor-pointer">
+                Company ATS
+              </button>
+              <button type="button" onclick="window.setCompanySection('create-interview'); window.switchTab('company');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                + Create Interview
+              </button>
+              <button type="button" onclick="window.setCompanySection('manage-candidates'); window.switchTab('company');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                Candidates
+              </button>
+              <button type="button" onclick="window.setCompanySection('interview-mgmt'); window.switchTab('company');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                Interview Campaigns
+              </button>
+              <button type="button" onclick="window.setCompanySection('company-profile'); window.switchTab('company');" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+                Company Profile
+              </button>
+            `;
+          }
+        }
+      } else {
+        // Logged Out Navigation
+        if (userBadge) {
+          userBadge.classList.add('hidden');
+          userBadge.classList.remove('flex');
+        }
+        if (logoutBtn) logoutBtn.classList.add('hidden');
+        if (loggedOutActions) loggedOutActions.classList.remove('hidden');
+
+        if (navLinksContainer) {
+          navLinksContainer.innerHTML = `
+            <button type="button" onclick="window.switchTab('welcome')" id="nav-btn-welcome" class="nav-item text-xs font-bold px-4 py-1.5 rounded-full bg-[#6655D9] text-white shadow-button transition-all cursor-pointer">
+              Welcome
+            </button>
+            <button type="button" onclick="window.switchTab('landing')" id="nav-btn-landing" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+              Home & Features
+            </button>
+            <button type="button" onclick="window.openStudentAuth()" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+              Student Portal
+            </button>
+            <button type="button" onclick="window.openCompanyAuth()" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+              Company ATS
+            </button>
+            <button type="button" onclick="window.switchTab('mock-room')" id="nav-btn-mock-room" class="nav-item text-xs font-semibold px-4 py-1.5 rounded-full text-[#94A3B8] hover:text-white transition-all cursor-pointer">
+              Live AI Chamber
+            </button>
+          `;
+        }
+      }
+    }
+
+    // Synchronize welcome cards when session is already active
+    function syncWelcomePageActiveState() {
+      var user = getStoredUser();
+      var banner = document.getElementById('welcome-active-session-banner');
+      var bannerTitle = document.getElementById('welcome-active-title');
+      var bannerAvatar = document.getElementById('welcome-active-avatar');
+      var stuBtnText = document.getElementById('card-btn-student-text');
+      var compBtnText = document.getElementById('card-btn-company-text');
+
+      if (user) {
+        if (banner) banner.classList.remove('hidden');
+        var displayName = user.name || user.companyName || 'User';
+        if (bannerTitle) bannerTitle.innerText = 'Signed in as ' + displayName + ' (' + user.role.toUpperCase() + ')';
+        if (bannerAvatar) bannerAvatar.innerText = displayName.charAt(0).toUpperCase();
+
+        if (stuBtnText) {
+          stuBtnText.innerText = user.role === 'student' ? 'Go to My Student Dashboard →' : 'Switch to Student Account';
+        }
+        if (compBtnText) {
+          compBtnText.innerText = user.role === 'company' ? 'Go to My Company ATS →' : 'Switch to Company Account';
+        }
+      } else {
+        if (banner) banner.classList.add('hidden');
+        if (stuBtnText) stuBtnText.innerText = 'Continue as Student';
+        if (compBtnText) compBtnText.innerText = 'Continue as Company';
+      }
+    }
+
+    // Handles Top Left Brand Logo click
+    window.handleBrandClick = function() {
+      var user = getStoredUser();
+      if (user && user.role === 'student') {
+        window.switchTab('student');
+      } else if (user && user.role === 'company') {
+        window.switchTab('company');
+      } else {
+        window.switchTab('welcome');
+      }
+    };
+
+    // Navigates directly to the currently active dashboard
+    window.goToActiveDashboard = function() {
+      var user = getStoredUser();
+      if (user && user.role === 'company') {
+        window.switchTab('company');
+      } else if (user && user.role === 'student') {
+        window.switchTab('student');
+      } else {
+        window.switchTab('welcome');
+      }
+    };
+
+    // ==============================================================
+    // 3. TAB / VIEW SWITCHER WITH ROLE GUARD
+    // ==============================================================
+    window.switchTab = function(tabId) {
+      console.log('Navigating to view:', tabId);
+      var user = getStoredUser();
+
+      // Guard: Block cross-role access gracefully without logging out
+      if (tabId === 'student') {
+        if (!user || user.role !== 'student') {
+          window.showToast('Please sign in with your student name to access the Student Portal.', 'warning');
+          window.openStudentAuth();
+          return;
+        }
+        renderStudentDashboard(user);
+      }
+
+      if (tabId === 'company') {
+        if (!user || user.role !== 'company') {
+          window.showToast('Please sign in as a Company Recruiter to access the Company ATS.', 'warning');
+          window.openCompanyAuth();
+          return;
+        }
+        renderCompanyDashboard(user);
+      }
+
+      // Hide all panels
+      document.querySelectorAll('.view-panel').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+
+      // Show requested panel
+      var activeEl = document.getElementById('view-' + tabId);
+      if (activeEl) {
+        activeEl.classList.remove('hidden');
+      }
+
+      // Highlight active nav item
+      document.querySelectorAll('#main-nav-links .nav-item').forEach(function(btn) {
+        btn.classList.remove('bg-[#6655D9]', 'bg-[#0284C7]', 'text-white', 'shadow-button');
+        btn.classList.add('text-[#94A3B8]');
+      });
+      var activeNavBtn = document.getElementById('nav-btn-' + tabId);
+      if (activeNavBtn) {
+        var u = getStoredUser();
+        var bgClass = (u && u.role === 'company') ? 'bg-[#0284C7]' : 'bg-[#6655D9]';
+        activeNavBtn.classList.add(bgClass, 'text-white', 'shadow-button');
+        activeNavBtn.classList.remove('text-[#94A3B8]');
+      }
+
+      // Sync welcome state if navigating to welcome
+      if (tabId === 'welcome') {
+        syncWelcomePageActiveState();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Explicit Logout
+    window.logout = function() {
+      setStoredUser(null);
+      window.showToast('Logged out successfully.', 'info');
+      window.switchTab('welcome');
+    };
+
+    // Welcome Card Click Handlers
+    window.handleStudentCardClick = function() {
+      var user = getStoredUser();
+      if (user && user.role === 'student') {
+        window.switchTab('student');
+      } else {
+        window.openStudentAuth();
+      }
+    };
+
+    window.handleCompanyCardClick = function() {
+      var user = getStoredUser();
+      if (user && user.role === 'company') {
+        window.switchTab('company');
+      } else {
+        window.openCompanyAuth();
+      }
+    };
+
+    // ==============================================================
+    // 4. STUDENT AUTHENTICATION (DYNAMIC USER NAME RECOGNITION)
+    // ==============================================================
+    var currentStudentAuthMode = 'login';
+
+    window.openStudentAuth = function() {
+      document.querySelectorAll('.view-panel').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+      var el = document.getElementById('view-auth-student');
+      if (el) el.classList.remove('hidden');
+      window.setStudentAuthMode('login');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.setStudentAuthMode = function(mode) {
+      currentStudentAuthMode = mode;
+      var title = document.getElementById('student-auth-title');
+      var desc = document.getElementById('student-auth-desc');
+      var btnLogin = document.getElementById('tab-btn-student-login');
+      var btnRegister = document.getElementById('tab-btn-student-register');
+      var fieldConfirm = document.getElementById('student-field-confirm-pass');
+      var forgotLink = document.getElementById('student-forgot-link');
+      var submitBtn = document.getElementById('student-submit-btn');
+      var errorBox = document.getElementById('student-error-box');
+
+      if (errorBox) errorBox.classList.add('hidden');
+
+      if (mode === 'register') {
+        if (title) title.innerText = 'Create Student Account';
+        if (desc) desc.innerText = 'Register with your name to start non-repeating AI mock interviews.';
+        if (btnLogin) btnLogin.className = 'flex-1 py-2 font-bold rounded-xl text-[#94A3B8] hover:text-white transition-all';
+        if (btnRegister) btnRegister.className = 'flex-1 py-2 font-bold rounded-xl bg-[#6655D9] text-white transition-all';
+        if (fieldConfirm) fieldConfirm.classList.remove('hidden');
+        if (forgotLink) forgotLink.classList.add('hidden');
+        if (submitBtn) submitBtn.innerText = 'Create Student Account';
+      } else {
+        if (title) title.innerText = 'Student Sign In';
+        if (desc) desc.innerText = 'Sign in with your name to access your mock sessions and roadmap.';
+        if (btnLogin) btnLogin.className = 'flex-1 py-2 font-bold rounded-xl bg-[#6655D9] text-white transition-all';
+        if (btnRegister) btnRegister.className = 'flex-1 py-2 font-bold rounded-xl text-[#94A3B8] hover:text-white transition-all';
+        if (fieldConfirm) fieldConfirm.classList.add('hidden');
+        if (forgotLink) forgotLink.classList.remove('hidden');
+        if (submitBtn) submitBtn.innerText = 'Login as Student';
+      }
+    };
+
+    // Demo fill ONLY fills Aarav if specifically requested
+    window.fillDemoStudent = function() {
+      var nameInput = document.getElementById('student-name-input');
+      var email = document.getElementById('student-email');
+      var pass = document.getElementById('student-password');
+      if (nameInput) nameInput.value = 'Aarav Sharma';
+      if (email) email.value = 'aarav.sharma@example.edu';
+      if (pass) pass.value = 'Student@123';
+      window.showToast('Demo credentials populated for Aarav Sharma!', 'info');
+    };
+
+    // Helper to format clean human names from input or email
+    function formatCleanName(rawName, email) {
+      if (rawName && rawName.trim().length > 0) {
+        return rawName.trim();
+      }
+      if (email && email.includes('@')) {
+        var local = email.split('@')[0];
+        return local
+          .replace(/[._\-+]/g, ' ')
+          .replace(/\b\w/g, function(l) { return l.toUpperCase(); });
+      }
+      return 'Candidate';
+    }
+
+    window.handleStudentAuth = function(e) {
+      e.preventDefault();
+      var errorBox = document.getElementById('student-error-box');
+      if (errorBox) errorBox.classList.add('hidden');
+
+      var inputName = (document.getElementById('student-name-input').value || '').trim();
+      var email = (document.getElementById('student-email').value || '').trim();
+      var password = (document.getElementById('student-password').value || '').trim();
+
+      if (!email || !password) {
+        showAuthError('student', 'Please provide your email address and password.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAuthError('student', 'Password must be at least 6 characters long.');
+        return;
+      }
+
+      var finalName = formatCleanName(inputName, email);
+
+      if (currentStudentAuthMode === 'register') {
+        var confirmPass = (document.getElementById('student-confirm-password').value || '').trim();
+        if (password !== confirmPass) {
+          showAuthError('student', 'Passwords do not match. Please verify.');
+          return;
+        }
+
+        var newStudent = {
+          id: 'stu_' + Date.now(),
+          name: finalName,
+          email: email,
+          role: 'student',
+          college: 'Candidate University',
+          degree: 'B.Tech / Degree Candidate',
+          graduationYear: 2025,
+          skills: ['Problem Solving', 'Data Structures', 'Communication', 'React.js']
+        };
+
+        setStoredUser(newStudent);
+        window.showToast('Welcome, ' + finalName + '! Your account has been created.', 'success');
+        window.switchTab('student');
+      } else {
+        // Sign in with user's actual entered name
+        var studentUser = {
+          id: 'usr_' + Date.now(),
+          name: finalName,
+          email: email,
+          role: 'student',
+          college: inputName === 'Aarav Sharma' ? 'IIT Bombay' : 'Candidate University',
+          degree: 'B.Tech Computer Science',
+          graduationYear: 2025,
+          skills: ['React.js', 'Node.js', 'Python', 'System Design']
+        };
+
+        setStoredUser(studentUser);
+        window.showToast('Welcome, ' + finalName + '!', 'success');
+        window.switchTab('student');
+      }
+    };
+
+    // Dynamically updates all student views with the actual user's name
+    function renderStudentDashboard(user) {
+      if (!user) user = getStoredUser();
+      if (!user) return;
+
+      var name = user.name || 'Candidate';
+      var welcomeHeading = document.getElementById('student-welcome-heading');
+      if (welcomeHeading) welcomeHeading.innerText = 'Welcome back, ' + name + ' 👋';
+
+      var welcomeSub = document.getElementById('student-welcome-sub');
+      if (welcomeSub) {
+        var col = user.college || 'Candidate Portal';
+        var deg = user.degree || 'Degree Program';
+        var yr = user.graduationYear || 2025;
+        welcomeSub.innerText = col + ' • ' + deg + ' (' + yr + ')';
+      }
+
+      // Pre-fill profile form with user's actual information
+      var profName = document.getElementById('prof-stu-name');
+      if (profName) profName.value = name;
+
+      var profEmail = document.getElementById('prof-stu-email');
+      if (profEmail) profEmail.value = user.email || '';
+
+      var profCollege = document.getElementById('prof-stu-college');
+      if (profCollege) profCollege.value = user.college || '';
+
+      var profDegree = document.getElementById('prof-stu-degree');
+      if (profDegree) profDegree.value = user.degree || '';
+    }
+
+    // Save Profile function updates the name everywhere immediately
+    window.saveStudentProfile = function(e) {
+      e.preventDefault();
+      var name = (document.getElementById('prof-stu-name').value || '').trim();
+      var email = (document.getElementById('prof-stu-email').value || '').trim();
+      var college = (document.getElementById('prof-stu-college').value || '').trim();
+      var degree = (document.getElementById('prof-stu-degree').value || '').trim();
+
+      if (!name) {
+        window.showToast('Please enter your name.', 'warning');
+        return;
+      }
+
+      var user = getStoredUser() || { role: 'student' };
+      user.name = name;
+      user.email = email;
+      user.college = college;
+      user.degree = degree;
+
+      setStoredUser(user);
+      renderStudentDashboard(user);
+      window.showToast('Profile updated: Welcome, ' + name + '!', 'success');
+    };
+
+    // ==============================================================
+    // 5. COMPANY AUTHENTICATION & DASHBOARD
+    // ==============================================================
+    var currentCompanyAuthMode = 'login';
+
+    window.openCompanyAuth = function() {
+      document.querySelectorAll('.view-panel').forEach(function(el) {
+        el.classList.add('hidden');
+      });
+      var el = document.getElementById('view-auth-company');
+      if (el) el.classList.remove('hidden');
+      window.setCompanyAuthMode('login');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.setCompanyAuthMode = function(mode) {
+      currentCompanyAuthMode = mode;
+      var title = document.getElementById('company-auth-title');
+      var desc = document.getElementById('company-auth-desc');
+      var btnLogin = document.getElementById('tab-btn-company-login');
+      var btnRegister = document.getElementById('tab-btn-company-register');
+      var fieldConfirm = document.getElementById('company-field-confirm-pass');
+      var forgotLink = document.getElementById('company-forgot-link');
+      var submitBtn = document.getElementById('company-submit-btn');
+      var errorBox = document.getElementById('company-error-box');
+
+      if (errorBox) errorBox.classList.add('hidden');
+
+      if (mode === 'register') {
+        if (title) title.innerText = 'Create Company Account';
+        if (desc) desc.innerText = 'Register your organization to start publishing interviews & evaluating talent.';
+        if (btnLogin) btnLogin.className = 'flex-1 py-2 font-bold rounded-xl text-[#94A3B8] hover:text-white transition-all';
+        if (btnRegister) btnRegister.className = 'flex-1 py-2 font-bold rounded-xl bg-[#0284C7] text-white transition-all';
+        if (fieldConfirm) fieldConfirm.classList.remove('hidden');
+        if (forgotLink) forgotLink.classList.add('hidden');
+        if (submitBtn) submitBtn.innerText = 'Create Company Account';
+      } else {
+        if (title) title.innerText = 'Company Sign In';
+        if (desc) desc.innerText = 'Sign in to create interviews, discover talent and manage candidates.';
+        if (btnLogin) btnLogin.className = 'flex-1 py-2 font-bold rounded-xl bg-[#0284C7] text-white transition-all';
+        if (btnRegister) btnRegister.className = 'flex-1 py-2 font-bold rounded-xl text-[#94A3B8] hover:text-white transition-all';
+        if (fieldConfirm) fieldConfirm.classList.add('hidden');
+        if (forgotLink) forgotLink.classList.remove('hidden');
+        if (submitBtn) submitBtn.innerText = 'Login as Company';
+      }
+    };
+
+    window.fillDemoCompany = function() {
+      var rName = document.getElementById('company-recruiter-name');
+      var cName = document.getElementById('company-name');
+      var email = document.getElementById('company-email');
+      var pass = document.getElementById('company-password');
+      if (rName) rName.value = 'Sarah Jenkins';
+      if (cName) cName.value = 'TechPulse Cloud Solutions';
+      if (email) email.value = 'recruiter@techpulse.io';
+      if (pass) pass.value = 'Recruiter@123';
+      window.showToast('Demo credentials populated for TechPulse Recruiter!', 'info');
+    };
+
+    window.handleCompanyAuth = function(e) {
+      e.preventDefault();
+      var errorBox = document.getElementById('company-error-box');
+      if (errorBox) errorBox.classList.add('hidden');
+
+      var recName = (document.getElementById('company-recruiter-name').value || '').trim();
+      var compName = (document.getElementById('company-name').value || '').trim();
+      var email = (document.getElementById('company-email').value || '').trim();
+      var password = (document.getElementById('company-password').value || '').trim();
+
+      if (!email || !password) {
+        showAuthError('company', 'Please provide official work email and password.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAuthError('company', 'Password must be at least 6 characters long.');
+        return;
+      }
+
+      var finalRecruiter = formatCleanName(recName, email);
+      var finalCompany = compName || 'Enterprise Tech';
+
+      var compUser = {
+        id: 'comp_' + Date.now(),
+        name: finalRecruiter,
+        companyName: finalCompany,
+        email: email,
+        role: 'company',
+        industry: 'Enterprise Software & Cloud Platforms',
+        website: 'https://' + finalCompany.toLowerCase().replace(/[^a-z0-9]/g, '') + '.io',
+        location: 'Global / Remote'
+      };
+
+      setStoredUser(compUser);
+      window.showToast('Welcome, ' + finalRecruiter + ' (' + finalCompany + ')!', 'success');
+      window.switchTab('company');
+    };
+
+    function renderCompanyDashboard(user) {
+      if (!user) user = getStoredUser();
+      if (!user) return;
+
+      var cHeading = document.getElementById('company-welcome-heading');
+      if (cHeading) cHeading.innerText = user.companyName || 'TechPulse Cloud Solutions';
+
+      var cSub = document.getElementById('company-welcome-sub');
+      if (cSub) cSub.innerText = 'Recruiter: ' + (user.name || 'Hiring Lead') + ' • ' + (user.industry || 'Cloud & AI Platforms');
+
+      var pCName = document.getElementById('prof-comp-name');
+      if (pCName) pCName.value = user.companyName || '';
+
+      var pRName = document.getElementById('prof-comp-recruiter');
+      if (pRName) pRName.value = user.name || '';
+
+      var pEmail = document.getElementById('prof-comp-email');
+      if (pEmail) pEmail.value = user.email || '';
+
+      renderCandidateTable();
+      renderCompanyInterviews();
+    }
+
+    function renderCandidateTable() {
+      var tbody = document.getElementById('candidate-table-body');
+      if (!tbody) return;
+
+      var html = '';
+      sampleCandidates.forEach(function(cand) {
+        var initials = cand.name.split(' ').map(function(n) { return n[0]; }).join('');
+        html += `
+          <tr class="hover:bg-white/5 transition-colors">
+            <td class="py-3 px-4 font-bold text-white flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-[#6655D9] flex items-center justify-center text-[10px] font-bold text-white">${initials}</div>
+              <span>${cand.name}</span>
+            </td>
+            <td class="py-3 px-4 text-gray-400">${cand.email}</td>
+            <td class="py-3 px-4">${cand.role}</td>
+            <td class="py-3 px-4">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                ${cand.status}
+              </span>
+            </td>
+            <td class="py-3 px-4 font-black text-[#A99AF5]">${cand.score}</td>
+            <td class="py-3 px-4 text-right">
+              <button type="button" onclick="window.showCandidateDetails('${cand.name}', '${cand.email}', '${cand.role}', '${cand.score}', '${cand.status}')" class="px-3 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white cursor-pointer">
+                View
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }
+
+    function showAuthError(role, message) {
+      var box = document.getElementById(role + '-error-box');
+      if (box) {
+        box.innerText = message;
+        box.classList.remove('hidden');
+      }
+    }
+
+    // ==============================================================
+    // 6. NON-REPEATING QUESTION ENGINE (SECTION 7)
+    // ==============================================================
+    window.getAvailableQuestions = function(category) {
+      if (category === 'Mixed') {
+        return QUESTION_BANK;
+      }
+      return QUESTION_BANK.filter(function(q) {
+        return q.category.toLowerCase() === category.toLowerCase();
+      });
+    };
+
+    window.openMockWithCategory = function(cat) {
+      activeMockCategory = cat;
+      askedQuestionIds = []; // Reset question history for fresh non-repeating cycle
+      window.switchTab('mock-room');
+      window.loadNextUnrepeatedQuestion(cat);
+      window.showToast('Initialized ' + cat + ' AI Mock Session (Non-repeating question bank active)', 'info');
+    };
+
+    window.loadNextUnrepeatedQuestion = function(category) {
+      var pool = window.getAvailableQuestions(category);
+      var unasked = pool.filter(function(q) {
+        return !askedQuestionIds.includes(q.id);
+      });
+
+      if (unasked.length === 0) {
+        window.showToast('🎉 You have completed all ' + pool.length + ' questions in this chamber! Resetting pool for a fresh round.', 'success');
+        askedQuestionIds = [];
+        unasked = pool;
+      }
+
+      var selected = unasked[0];
+      askedQuestionIds.push(selected.id);
+      currentQuestionObj = selected;
+      window.currentQuestionObj = selected;
+      window.askedQuestionIds = askedQuestionIds;
+      window.renderQuestion(selected);
+    };
+
+    window.renderQuestion = function(q) {
+      if (!q) return;
+      var pool = window.getAvailableQuestions(activeMockCategory);
+
+      var catLabel = document.getElementById('mock-category-label');
+      if (catLabel) catLabel.innerText = activeMockCategory + ' Mock Chamber (' + q.topic + ')';
+
+      var idxElem = document.getElementById('current-q-index');
+      if (idxElem) idxElem.innerText = askedQuestionIds.length;
+
+      var totalElem = document.getElementById('total-q-count');
+      if (totalElem) totalElem.innerText = pool.length;
+
+      var diffElem = document.getElementById('mock-diff-badge');
+      if (diffElem) diffElem.innerText = q.difficulty + ' Difficulty';
+
+      var qText = document.getElementById('mock-question-text');
+      if (qText) qText.innerText = '"' + q.question + '"';
+
+      var tipElem = document.getElementById('mock-tip-text');
+      if (tipElem) tipElem.innerText = q.tip;
+
+      var input = document.getElementById('answer-input');
+      if (input) input.value = '';
+
+      var evalCard = document.getElementById('evaluation-card');
+      if (evalCard) evalCard.classList.add('hidden');
+    };
+
+    window.nextQuestion = function() {
+      window.loadNextUnrepeatedQuestion(activeMockCategory);
+      window.showToast('Loaded next unique question!', 'info');
+    };
+
+    window.prefillAnswer = function() {
+      if (!currentQuestionObj) return;
+      var input = document.getElementById('answer-input');
+      if (input) {
+        input.value = currentQuestionObj.idealAnswer;
+      }
+      window.showToast('Ideal model answer loaded for this specific question!', 'success');
+    };
+
+    window.clearAnswer = function() {
+      var input = document.getElementById('answer-input');
+      if (input) input.value = '';
+      window.showToast('Answer input cleared.', 'info');
+    };
+
+    window.submitMockAnswer = function() {
+      var input = document.getElementById('answer-input');
+      var val = input ? input.value.trim() : '';
+      if (!val) {
+        window.showToast('Please type or record an answer first.', 'warning');
+        return;
+      }
+
+      var q = currentQuestionObj || QUESTION_BANK[0];
+      var evalCard = document.getElementById('evaluation-card');
+      if (evalCard) {
+        document.getElementById('eval-score-text').innerText = 'Overall Rubric Score: ' + q.scores.overall + ' / 10';
+        document.getElementById('eval-accuracy-score').innerText = q.scores.accuracy + ' / 10';
+        document.getElementById('eval-relevance-score').innerText = q.scores.relevance + ' / 10';
+        document.getElementById('eval-clarity-score').innerText = q.scores.comm + ' / 10';
+        document.getElementById('eval-feedback-text').innerText = q.rubricBreakdown;
+
+        evalCard.classList.remove('hidden');
+        evalCard.scrollIntoView({ behavior: 'smooth' });
+      }
+      window.showToast('AI Rubric Evaluation compiled: ' + q.scores.overall + ' / 10!', 'success');
+    };
+
+    // ==============================================================
+    // 7. COMPANY INTERVIEWS & CANDIDATE MANAGEMENT
+    // ==============================================================
+    window.setStudentSection = function(sectionId) {
+      document.querySelectorAll('.stu-section').forEach(function(sec) {
+        sec.classList.add('hidden');
+      });
+      var activeSec = document.getElementById('stu-sec-' + sectionId);
+      if (activeSec) activeSec.classList.remove('hidden');
+
+      document.querySelectorAll('.stu-nav-tab').forEach(function(tab) {
+        tab.className = 'stu-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer';
+      });
+      var activeTab = document.getElementById('stu-tab-' + sectionId);
+      if (activeTab) {
+        activeTab.className = 'stu-nav-tab px-4 py-2 rounded-xl text-xs font-bold bg-[#6655D9] text-white transition-all cursor-pointer';
+      }
+    };
+
+    window.setCompanySection = function(sectionId) {
+      document.querySelectorAll('.comp-section').forEach(function(sec) {
+        sec.classList.add('hidden');
+      });
+      var activeSec = document.getElementById('comp-sec-' + sectionId);
+      if (activeSec) activeSec.classList.remove('hidden');
+
+      document.querySelectorAll('.comp-nav-tab').forEach(function(tab) {
+        tab.className = 'comp-nav-tab px-4 py-2 rounded-xl text-xs font-semibold text-[#94A3B8] hover:text-white transition-all cursor-pointer';
+      });
+      var activeTab = document.getElementById('comp-tab-' + sectionId);
+      if (activeTab) {
+        activeTab.className = 'comp-nav-tab px-4 py-2 rounded-xl text-xs font-bold bg-[#0284C7] text-white transition-all cursor-pointer';
+      }
+
+      if (sectionId === 'interview-mgmt') {
+        renderCompanyInterviews();
+      }
+    };
+
+    window.handleCreateInterview = function(e) {
+      e.preventDefault();
+      var title = document.getElementById('int-create-title').value.trim();
+      var role = document.getElementById('int-create-role').value.trim();
+      var skills = document.getElementById('int-create-skills').value.trim();
+      var exp = document.getElementById('int-create-exp').value;
+      var type = document.getElementById('int-create-type').value;
+      var qCount = document.getElementById('int-create-qcount').value;
+
+      if (!title || !role || !skills) {
+        window.showToast('Please fill all required fields.', 'warning');
+        return;
+      }
+
+      var newInt = {
+        id: 'int_' + Date.now(),
+        title: title,
+        role: role,
+        skills: skills,
+        experience: exp,
+        type: type,
+        questionCount: parseInt(qCount, 10) || 5,
+        createdDate: 'Just now'
+      };
+
+      companyInterviews.unshift(newInt);
+
+      document.getElementById('int-create-title').value = '';
+      document.getElementById('int-create-role').value = '';
+      document.getElementById('int-create-skills').value = '';
+
+      window.showToast('Interview "' + title + '" successfully created!', 'success');
+      window.setCompanySection('interview-mgmt');
+    };
+
+    function renderCompanyInterviews() {
+      var container = document.getElementById('created-interviews-container');
+      if (!container) return;
+
+      if (companyInterviews.length === 0) {
+        container.innerHTML = '<div class="col-span-2 text-center py-10 text-xs text-[#94A3B8]">No created interviews found. Click "+ Create Interview" to add one!</div>';
+        return;
+      }
+
+      var html = '';
+      companyInterviews.forEach(function(item) {
+        html += `
+          <div class="glass-card p-6 rounded-3xl space-y-4 border border-white/10 hover:border-[#38BDF8]/40 transition-all">
+            <div class="flex items-center justify-between pb-3 border-b border-white/10">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#0284C7]/20 text-[#38BDF8] border border-[#0284C7]/30">${item.type}</span>
+              <span class="text-[11px] text-gray-400 font-mono">${item.createdDate}</span>
+            </div>
+
+            <div>
+              <h4 class="text-base font-bold text-white">${item.title}</h4>
+              <p class="text-xs text-[#38BDF8] font-semibold mt-0.5">${item.role} • ${item.experience}</p>
+            </div>
+
+            <div class="space-y-1">
+              <span class="text-[10px] uppercase font-bold text-[#94A3B8]">Required Skills:</span>
+              <p class="text-xs text-gray-300">${item.skills}</p>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-white/10">
+              <span class="text-xs text-[#94A3B8] font-bold">${item.questionCount} Questions</span>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="window.viewCandidateResults('${item.title}')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs font-bold text-white transition-colors cursor-pointer">
+                  Results
+                </button>
+                <button type="button" onclick="window.openEditInterview('${item.id}')" class="px-3 py-1.5 rounded-lg bg-[#0284C7]/20 hover:bg-[#0284C7]/40 text-xs font-bold text-[#38BDF8] border border-[#0284C7]/40 transition-colors cursor-pointer">
+                  Edit
+                </button>
+                <button type="button" onclick="window.deleteInterview('${item.id}')" class="px-3 py-1.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/40 text-xs font-bold text-rose-300 border border-rose-500/40 transition-colors cursor-pointer">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    window.openEditInterview = function(id) {
+      var found = companyInterviews.find(function(i) { return i.id === id; });
+      if (!found) return;
+
+      document.getElementById('edit-int-id').value = found.id;
+      document.getElementById('edit-int-title').value = found.title;
+      document.getElementById('edit-int-role').value = found.role;
+      document.getElementById('edit-int-skills').value = found.skills;
+
+      var modal = document.getElementById('edit-interview-modal');
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.saveEditedInterview = function() {
+      var id = document.getElementById('edit-int-id').value;
+      var found = companyInterviews.find(function(i) { return i.id === id; });
+      if (found) {
+        found.title = document.getElementById('edit-int-title').value.trim();
+        found.role = document.getElementById('edit-int-role').value.trim();
+        found.skills = document.getElementById('edit-int-skills').value.trim();
+        window.closeModal('edit-interview-modal');
+        renderCompanyInterviews();
+        window.showToast('Interview campaign updated!', 'success');
+      }
+    };
+
+    window.deleteInterview = function(id) {
+      companyInterviews = companyInterviews.filter(function(i) { return i.id !== id; });
+      renderCompanyInterviews();
+      window.showToast('Interview campaign deleted.', 'info');
+    };
+
+    window.viewCandidateResults = function(title) {
+      window.showToast('Viewing candidate submissions for: ' + title, 'info');
+      window.setCompanySection('manage-candidates');
+    };
+
+    window.showCandidateDetails = function(name, email, role, score, status) {
+      var modal = document.getElementById('candidate-detail-modal');
+      document.getElementById('modal-cand-name').innerText = name;
+      document.getElementById('modal-cand-email').innerText = email;
+      document.getElementById('modal-cand-role').innerText = role;
+      document.getElementById('modal-cand-score').innerText = score;
+      document.getElementById('modal-cand-status').innerText = status;
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.sendCandidateInvite = function() {
+      window.closeModal('candidate-detail-modal');
+      window.showToast('Next round invitation dispatched via official mail!', 'success');
+    };
+
+    window.saveCompanyProfile = function(e) {
+      e.preventDefault();
+      var cname = document.getElementById('prof-comp-name').value;
+      var rname = document.getElementById('prof-comp-recruiter').value;
+      var email = document.getElementById('prof-comp-email').value;
+      var user = getStoredUser() || DEMO_USERS.company;
+      user.companyName = cname;
+      user.name = rname;
+      user.email = email;
+      setStoredUser(user);
+      var welcomeHeading = document.getElementById('company-welcome-heading');
+      if (welcomeHeading) welcomeHeading.innerText = cname;
+      window.showToast('Company profile details updated!', 'success');
+    };
+
+    window.viewMockReport = function(title, score, category) {
+      var modal = document.getElementById('mock-report-modal');
+      var titleEl = document.getElementById('report-modal-title');
+      var scoreEl = document.getElementById('report-modal-score');
+      if (titleEl) titleEl.innerText = title + ' (' + category + ')';
+      if (scoreEl) scoreEl.innerText = score + ' / 10';
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    // ==============================================================
+    // 8. TOAST NOTIFICATIONS, AUDIO & SPEECH SYNTHESIS
+    // ==============================================================
+    window.showToast = function(message, type) {
+      var container = document.getElementById('toast-container');
+      if (!container) return;
+      var toast = document.createElement('div');
+      var borderColor = type === 'success' ? 'border-emerald-500/50 text-emerald-300' :
+                        type === 'warning' ? 'border-amber-500/50 text-amber-300' :
+                        type === 'error' ? 'border-rose-500/50 text-rose-300' :
+                        'border-[#38BDF8]/50 text-cyan-200';
+      toast.className = 'toast-box p-4 rounded-2xl glass-dark border ' + borderColor + ' text-xs font-semibold shadow-2xl flex items-center justify-between gap-3';
+      toast.innerHTML = '<span>' + message + '</span><span style="opacity:0.6; cursor:pointer;" onclick="this.parentElement.remove()">✕</span>';
+      container.appendChild(toast);
+      setTimeout(function() {
+        if (toast.parentElement) toast.remove();
+      }, 4000);
+    };
+
+    window.closeModal = function(id) {
+      var modal = document.getElementById(id);
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.openForgotPassword = function(role) {
+      var modal = document.getElementById('forgot-password-modal');
+      var input = document.getElementById('forgot-email-input');
+      var currentEmail = document.getElementById(role + '-email');
+      if (input && currentEmail) input.value = currentEmail.value || '';
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.submitForgotPassword = function() {
+      var input = document.getElementById('forgot-email-input');
+      var email = input ? input.value.trim() : '';
+      if (!email) {
+        window.showToast('Please enter your email address.', 'warning');
+        return;
+      }
+      window.closeModal('forgot-password-modal');
+      window.showToast('Password reset link dispatched to ' + email + '. Check your inbox!', 'success');
+    };
+
+    // Speech Recognition
+    var isRecording = false;
+    var recognition = null;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.onresult = function(e) {
+        var transcript = '';
+        for (var i = e.resultIndex; i < e.results.length; ++i) {
+          transcript += e.results[i][0].transcript;
+        }
+        var input = document.getElementById('answer-input');
+        if (input) input.value = transcript;
+      };
+      recognition.onend = function() {
+        isRecording = false;
+        var lbl = document.getElementById('mic-label');
+        if (lbl) lbl.innerText = 'Record Voice Answer';
+      };
+    }
+
+    window.toggleMic = function() {
+      var lbl = document.getElementById('mic-label');
+      if (!recognition) {
+        if (!isRecording) {
+          isRecording = true;
+          if (lbl) lbl.innerText = 'Listening (Simulated)...';
+          window.showToast('Microphone active. Simulating voice transcription...', 'info');
+          setTimeout(function() {
+            var input = document.getElementById('answer-input');
+            if (input && currentQuestionObj) {
+              input.value = currentQuestionObj.idealAnswer;
+            }
+            isRecording = false;
+            if (lbl) lbl.innerText = 'Record Voice Answer';
+            window.showToast('Speech transcribed successfully!', 'success');
+          }, 2500);
+        }
+        return;
+      }
+
+      if (isRecording) {
+        recognition.stop();
+        isRecording = false;
+        if (lbl) lbl.innerText = 'Record Voice Answer';
+      } else {
+        try {
+          recognition.start();
+          isRecording = true;
+          if (lbl) lbl.innerText = 'Listening (Speak now)...';
+          window.showToast('Microphone active! Speak your answer.', 'info');
+        } catch (err) {
+          console.warn('Mic start error:', err);
+        }
+      }
+    };
+
+    window.speakQuestion = function() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        var questionElem = document.getElementById('mock-question-text');
+        var text = questionElem ? questionElem.innerText : "Please answer the interview question.";
+        var utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        window.speechSynthesis.speak(utterance);
+        window.showToast('AI interviewer speaking question aloud...', 'info');
+      } else {
+        window.showToast('Text-to-speech not supported on this browser.', 'warning');
+      }
+    };
+
+    // ==============================================================
+    // 9. ONLOAD INITIALIZATION
+    // ==============================================================
+    window.addEventListener('DOMContentLoaded', function() {
+      updateNavAuthState();
+      syncWelcomePageActiveState();
+      renderCompanyInterviews();
+
+      var user = getStoredUser();
+      if (user && user.role === 'student') {
+        window.switchTab('student');
+      } else if (user && user.role === 'company') {
+        window.switchTab('company');
+      } else {
+        window.switchTab('welcome');
+      }
+    });
+  </script>
+</body>
+</html>
